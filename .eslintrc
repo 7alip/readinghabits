@@ -9,6 +9,9 @@
     "plugin:react-hooks/recommended",
     "plugin:prettier/recommended"
   ],
+  "globals": {
+    "process": true
+  },
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true

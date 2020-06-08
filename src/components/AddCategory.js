@@ -1,5 +1,13 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
+import {
+  Box,
+  Button,
+  Input,
+  FormControl,
+  FormLabel,
+  Stack,
+} from '@chakra-ui/core'
 
 import { ADD_CATEGORY } from '../apollo/queries'
 
@@ -14,17 +22,23 @@ const AddCategory = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Name"
-          name="name"
-          onChange={e => setTitle(e.target.value)}
-        />
-        <button type="submit">Send</button>
-      </form>
+    <Box>
+      <Stack spacing={3} as="form" onSubmit={handleSubmit}>
+        <FormControl>
+          <FormLabel htmlFor="name">Kategori Adı</FormLabel>
+          <Input
+            id="name"
+            placeholder="Kategori Adı"
+            name="name"
+            onChange={e => setTitle(e.target.value)}
+          />
+        </FormControl>
+        <Button leftIcon="add" variantColor="red" type="submit">
+          Ekle
+        </Button>
+      </Stack>
       <pre>{JSON.stringify(data, null, 2)}</pre>
-    </div>
+    </Box>
   )
 }
 

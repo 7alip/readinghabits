@@ -1,10 +1,10 @@
-import React from "react";
-import { useQuery } from "@apollo/client";
+import React from 'react'
+import { useQuery } from '@apollo/client'
 
-import { GET_CATEGORIES } from "../apollo/queries";
+import { GET_CATEGORIES } from '../apollo/queries'
 
 const CategoryList = () => {
-  const { loading, error, data } = useQuery(GET_CATEGORIES);
+  const { loading, error, data } = useQuery(GET_CATEGORIES)
 
   return (
     <div>
@@ -16,7 +16,7 @@ const CategoryList = () => {
         <pre>{JSON.stringify(data, null, 2)}</pre>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default CategoryList;
+export default CategoryList

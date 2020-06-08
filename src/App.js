@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
-import AddCategory from "./components/AddCategory";
-import CategoryList from "./components/CategoryList";
+import AddCategory from './components/AddCategory'
+import CategoryList from './components/CategoryList'
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
       <CategoryList />
       <AddCategory />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

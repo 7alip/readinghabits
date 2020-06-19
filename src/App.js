@@ -1,15 +1,22 @@
 import React from 'react'
-import { Box } from '@chakra-ui/core'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
-import AddCategory from './components/AddCategory'
-import CategoryList from './components/CategoryList'
+import HomePage from './pages/Home'
+import GroupPage from './pages/Group'
+import GroupsPage from './pages/Groups'
+import Layout from './components/layout/Layout'
 
 function App() {
   return (
-    <Box w={['full', 1 / 2, 1 / 4]} mx="auto">
-      <CategoryList />
-      <AddCategory />
-    </Box>
+    <Router>
+      <Layout>
+        <Switch>
+          <Route path="/group" exact component={GroupsPage} />
+          <Route path="/group/:id" component={GroupPage} />
+          <Route path="/" component={HomePage} />
+        </Switch>
+      </Layout>
+    </Router>
   )
 }
 

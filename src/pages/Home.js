@@ -1,12 +1,8 @@
 import React from 'react'
-import { Flex } from '@chakra-ui/core'
+import Layout from '../components/layout/Layout'
 
 const Home = () => {
-  return (
-    <Flex flex={1} justify="center" align="center">
-      Hoşgeldiniz
-    </Flex>
-  )
+  return <Layout>Hoşgeldiniz</Layout>
 }
 
 export default Home

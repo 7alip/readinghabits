@@ -1,22 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Flex, Stack } from '@chakra-ui/core'
+import { Flex, Box } from '@chakra-ui/core'
 
-import Footer from './Footer'
+import BottomNavigation from './BottomNavigation'
 
-const Layout = ({ children }) => {
+const Layout = ({ children, basic }) => {
   return (
-    <Flex flexDir="column" minH="100vh">
-      <Stack px={[2, 3, 4]} spacing={2} flex={1}>
+    <Flex flexDir="column" h="100vh" overflow="hidden">
+      <Box px={[2, 3, 4]} flex={1} overflowY="auto">
         {children}
-      </Stack>
-      <Footer />
+      </Box>
+      {!basic && <BottomNavigation />}
     </Flex>
   )
 }
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
+  basic: PropTypes.bool,
 }
 
 export default Layout

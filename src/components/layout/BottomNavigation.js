@@ -6,6 +6,7 @@ import {
   AiOutlineUser,
   AiOutlineUsergroupAdd,
   AiOutlineSetting,
+  AiOutlineCode,
 } from 'react-icons/ai'
 import styled from '@emotion/styled'
 
@@ -29,6 +30,11 @@ const barItems = [
     text: 'Ayarlar',
     link: '/settings',
     icon: <AiOutlineSetting />,
+  },
+  {
+    text: 'Testler',
+    link: '/test',
+    icon: <AiOutlineCode />,
   },
 ]
 

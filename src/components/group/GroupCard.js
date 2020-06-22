@@ -14,7 +14,7 @@ const GroupCard = ({
   users_count,
 }) => {
   return (
-    <Stack spacing={2} p={3} boxShadow="sm">
+    <Stack spacing={2} p={3} boxShadow="sm" bg="white">
       <Heading size="lg">{title}</Heading>
       <Text>
         {start_date}

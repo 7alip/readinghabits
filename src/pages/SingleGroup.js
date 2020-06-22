@@ -37,7 +37,7 @@ const GET_GROUP_BY_ID = gql`
   }
 `
 
-const Group = () => {
+const SingleGroup = () => {
   let { id } = useParams()
 
   const { loading, error, data } = useQuery(GET_GROUP_BY_ID, {
@@ -63,7 +63,7 @@ const Group = () => {
       <Button
         variantColor="teal"
         as={Link}
-        to="/test/groups"
+        to="/groups"
         alignSelf="flex-start"
         leftIcon="arrow-back"
       >
@@ -99,4 +99,4 @@ const Group = () => {
   )
 }
 
-export default Group
+export default SingleGroup

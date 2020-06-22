@@ -1,23 +1,29 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
-import { Flex, Box } from '@chakra-ui/core'
+import { useDisclosure, Box, Stack } from '@chakra-ui/core'
+import Header from './Header'
+import SideDrawer from './SideDrawer'
 
-import BottomNavigation from './BottomNavigation'
+const Layout = ({ children }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
-const Layout = ({ children, basic }) => {
+  const btnRef = useRef()
+
   return (
-    <Flex flexDir="column" h="100vh" overflow="hidden">
-      <Box px={[2, 3, 4]} flex={1} overflowY="auto">
+    <Stack minH="100vh" bg="gray.100">
+      <Header onOpen={onOpen} btnRef={btnRef} />
+
+      <Box flex={1} px={2}>
         {children}
       </Box>
-      {!basic && <BottomNavigation />}
-    </Flex>
+
+      <SideDrawer isOpen={isOpen} onClose={onClose} btnRef={btnRef} />
+    </Stack>
   )
 }
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
-  basic: PropTypes.bool,
 }
 
 export default Layout

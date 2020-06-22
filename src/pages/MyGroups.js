@@ -1,12 +1,15 @@
-import React from 'react'
-import { gql, useQuery } from '@apollo/client'
-import { Box, Spinner, Alert, Flex, Heading } from '@chakra-ui/core'
-import { Link, useRouteMatch } from 'react-router-dom'
-import GroupCard from '../components/_group/GroupCard'
+import React, { useContext } from 'react'
 
-const GET_GROUPS = gql`
-  query getGroups {
-    group {
+import { gql, useQuery } from '@apollo/client'
+import { Spinner, Alert, Box, Heading, Flex } from '@chakra-ui/core'
+import { Link } from 'react-router-dom'
+
+import { AuthContext } from '../App'
+import GroupCard from '../components/group/GroupCard'
+
+const GET_USER_GROUPS = gql`
+  query getUserGroups($id: Int!) {
+    group(where: { users: { user_id: { _eq: $id } } }) {
       id
       title
       start_date
@@ -31,9 +34,12 @@ const GET_GROUPS = gql`
   }
 `
 
-const Groups = () => {
-  let { path } = useRouteMatch()
-  const { loading, error, data } = useQuery(GET_GROUPS)
+const MyGroups = () => {
+  const { userId } = useContext(AuthContext)
+
+  const { loading, error, data } = useQuery(GET_USER_GROUPS, {
+    variables: { id: userId },
+  })
 
   if (loading) return <Spinner />
   if (error) return <Alert status="error">Error</Alert>
@@ -41,16 +47,16 @@ const Groups = () => {
   return (
     <Box>
       <Heading as="h1" my={5}>
-        Tüm Gruplar
+        Gruplarim
       </Heading>
-      <Flex wrap="wrap" mx={-2}>
+      <Flex wrap="wrap">
         {data.group.map(g => (
           <Box
             p={2}
             w={['full', null, 1 / 2]}
             key={g.id}
             as={Link}
-            to={`${path}/${g.id}`}
+            to={`/groups/${g.id}`}
           >
             <GroupCard
               title={g.title}
@@ -69,4 +75,4 @@ const Groups = () => {
   )
 }
 
-export default Groups
+export default MyGroups

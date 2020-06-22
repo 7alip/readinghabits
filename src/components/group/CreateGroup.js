@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/core'
 import { gql, useMutation } from '@apollo/client'
 import { AuthContext } from '../../App'
+import { GET_USER_GROUPS } from '../../pages/MyGroups'
 
 const CREATE_GROUP = gql`
   mutation createGroup($title: String!, $creator: Int!, $start: date!) {
@@ -27,27 +28,20 @@ const CREATE_GROUP = gql`
       }
     ) {
       affected_rows
-      returning {
-        id
-        title
-      }
     }
   }
 `
 
-const CreateGroup = ({ initialRef, isOpen, onClose, refetch }) => {
+const CreateGroup = ({ initialRef, isOpen, onClose }) => {
+  const { userId } = useContext(AuthContext)
   const [title, setTitle] = useState('')
   const [startDate, setStartDate] = useState('')
-  const { userId } = useContext(AuthContext)
 
-  const [onCreate, { data }] = useMutation(CREATE_GROUP, {
+  const [onCreate] = useMutation(CREATE_GROUP, {
     variables: { title, creator: userId, start: new Date(startDate) },
+    refetchQueries: [{ query: GET_USER_GROUPS, variables: { id: userId } }],
+    onCompleted: () => onClose(),
   })
-
-  if (data) {
-    refetch()
-    onClose()
-  }
 
   return (
     <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
@@ -67,21 +61,15 @@ const CreateGroup = ({ initialRef, isOpen, onClose, refetch }) => {
 
           <FormControl mt={4}>
             <FormLabel>Baslangic Tarihi</FormLabel>
-            <Input
-              onChange={e => {
-                setStartDate(e.target.value)
-                console.log('e.target.value', e.target.value)
-              }}
-              type="date"
-            />
+            <Input onChange={e => setStartDate(e.target.value)} type="date" />
           </FormControl>
         </ModalBody>
 
         <ModalFooter>
           <Button onClick={onCreate} variantColor="blue" mr={3}>
-            Save
+            Kaydet
           </Button>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose}>Vazgeç</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
@@ -92,7 +80,6 @@ CreateGroup.propTypes = {
   initialRef: PropTypes.object.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  refetch: PropTypes.func.isRequired,
 }
 
 export default CreateGroup

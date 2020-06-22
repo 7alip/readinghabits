@@ -16,7 +16,7 @@ import { AuthContext } from '../App'
 import GroupCard from '../components/group/GroupCard'
 import CreateGroup from '../components/group/CreateGroup'
 
-const GET_USER_GROUPS = gql`
+export const GET_USER_GROUPS = gql`
   query getUserGroups($id: Int!) {
     group(where: { users: { user_id: { _eq: $id } } }) {
       id
@@ -47,7 +47,7 @@ const MyGroups = () => {
   const { userId } = useContext(AuthContext)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const { loading, error, data, refetch } = useQuery(GET_USER_GROUPS, {
+  const { loading, error, data } = useQuery(GET_USER_GROUPS, {
     variables: { id: userId },
   })
 
@@ -70,12 +70,7 @@ const MyGroups = () => {
           Grup Olustur
         </Button>
       </Flex>
-      <CreateGroup
-        initialRef={initialRef}
-        isOpen={isOpen}
-        onClose={onClose}
-        refetch={refetch}
-      />
+      <CreateGroup initialRef={initialRef} isOpen={isOpen} onClose={onClose} />
       <Flex wrap="wrap">
         {data.group.map(g => (
           <Box

@@ -9,16 +9,21 @@ import {
   DrawerHeader,
   DrawerBody,
   List,
+  ListItem,
 } from '@chakra-ui/core'
 import { Link } from 'react-router-dom'
 
 const navItems = [
   {
-    title: 'My Groups',
+    title: 'Anasayfa',
+    link: '/',
+  },
+  {
+    title: 'Gruplarım',
     link: '/groups/me',
   },
   {
-    title: 'Groups',
+    title: 'Tüm Gruplar',
     link: '/groups',
   },
 ]
@@ -37,11 +42,13 @@ const SideDrawer = ({ isOpen, onClose, btnRef }) => {
         <DrawerHeader>Menu</DrawerHeader>
 
         <DrawerBody>
-          {navItems.map(item => (
-            <List key={item.link}>
-              <Link to={item.link}>{item.title}</Link>
-            </List>
-          ))}
+          <List>
+            {navItems.map(item => (
+              <Link key={item.link} to={item.link}>
+                <ListItem>{item.title}</ListItem>
+              </Link>
+            ))}
+          </List>
         </DrawerBody>
       </DrawerContent>
     </Drawer>

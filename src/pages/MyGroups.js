@@ -10,10 +10,9 @@ import {
   Button,
   useDisclosure,
 } from '@chakra-ui/core'
-import { Link } from 'react-router-dom'
 
 import { AuthContext } from '../App'
-import GroupCard from '../components/group/GroupCard'
+import GroupCardList from '../components/group/GroupCardList'
 import CreateGroup from '../components/group/CreateGroup'
 
 export const GET_USER_GROUPS = gql`
@@ -71,28 +70,7 @@ const MyGroups = () => {
         </Button>
       </Flex>
       <CreateGroup initialRef={initialRef} isOpen={isOpen} onClose={onClose} />
-      <Flex wrap="wrap">
-        {data.group.map(g => (
-          <Box
-            p={2}
-            w={['full', null, 1 / 2]}
-            key={g.id}
-            as={Link}
-            to={`/groups/${g.id}`}
-          >
-            <GroupCard
-              title={g.title}
-              start_date={g.start_date}
-              end_date={g.end_date}
-              is_active={g.is_active}
-              is_complete={g.is_complete}
-              is_private={g.is_private}
-              users_count={g.users_aggregate.aggregate.count}
-              fields_count={g.fields_aggregate.aggregate.count}
-            />
-          </Box>
-        ))}
-      </Flex>
+      <GroupCardList groups={data.group} />
     </Box>
   )
 }

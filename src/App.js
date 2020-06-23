@@ -11,7 +11,7 @@ import NotFoundPage from './pages/404'
 export const AuthContext = createContext()
 
 function App() {
-  const [userId, setUserId] = useState()
+  const [userId, setUserId] = useState(null)
 
   return (
     <AuthContext.Provider value={{ userId, setUserId }}>

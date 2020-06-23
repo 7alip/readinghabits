@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import {
   Spinner,
   Alert,
@@ -14,44 +14,18 @@ import {
 import { AuthContext } from '../App'
 import GroupCardList from '../components/group/GroupCardList'
 import CreateGroup from '../components/group/CreateGroup'
-
-export const GET_USER_GROUPS = gql`
-  query getUserGroups($id: Int!) {
-    group(where: { users: { user_id: { _eq: $id } } }) {
-      id
-      title
-      start_date
-      end_date
-      is_active
-      is_complete
-      is_private
-      creator {
-        username
-      }
-      fields_aggregate {
-        aggregate {
-          count
-        }
-      }
-      users_aggregate {
-        aggregate {
-          count
-        }
-      }
-    }
-  }
-`
+import { GET_USER_GROUPS } from '../apollo/groupQueries'
 
 const MyGroups = () => {
   const { userId } = useContext(AuthContext)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const { loading, error, data } = useQuery(GET_USER_GROUPS, {
+  const { loading, error, data, refetch } = useQuery(GET_USER_GROUPS, {
     variables: { id: userId },
   })
 
   const initialRef = React.useRef()
-  if (loading) return <Spinner />
+
   if (error) return <Alert status="error">Error</Alert>
 
   return (
@@ -69,8 +43,13 @@ const MyGroups = () => {
           Grup Olustur
         </Button>
       </Flex>
-      <CreateGroup initialRef={initialRef} isOpen={isOpen} onClose={onClose} />
-      <GroupCardList groups={data.group} />
+      <CreateGroup
+        onRefetch={refetch}
+        isOpen={isOpen}
+        onClose={onClose}
+        initialRef={initialRef}
+      />
+      {loading ? <Spinner /> : <GroupCardList groups={data.group} />}
     </Box>
   )
 }

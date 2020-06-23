@@ -47,6 +47,8 @@ const SingleGroup = () => {
   if (loading) return <Spinner />
   if (error) return <Alert status="error">Error</Alert>
 
+  if (!data.group_by_pk) return <Alert status="error">Grup bulunamadi!</Alert>
+
   const {
     title,
     is_active,

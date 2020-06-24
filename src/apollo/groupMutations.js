@@ -36,3 +36,22 @@ export const ADD_GROUP_CATEGORY = gql`
     }
   }
 `
+
+export const JOIN_GROUP = gql`
+  mutation joinGroup($groupId: Int!, $userId: Int!) {
+    insert_user_group(objects: { user_id: $userId, group_id: $groupId }) {
+      affected_rows
+    }
+  }
+`
+export const LEAVE_GROUP = gql`
+  mutation leaveGroup($groupId: Int!, $userId: Int!) {
+    delete_user_group(where: { group_id: { _eq: $groupId }, user_id: { _eq: $userId } }) {
+      affected_rows
+      returning {
+        user_id
+        group_id
+      }
+    }
+  }
+`

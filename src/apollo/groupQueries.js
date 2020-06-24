@@ -30,6 +30,35 @@ export const GET_GROUPS = gql`
   }
 `
 
+export const GET_GROUP_BY_ID = gql`
+  query getGroupById($id: Int!) {
+    group_by_pk(id: $id) {
+      title
+      is_active
+      is_private
+      is_complete
+      end_date
+      start_date
+      creator {
+        id
+      }
+      users {
+        user {
+          id
+          username
+        }
+      }
+      fields {
+        category {
+          title
+        }
+        min_value
+        point
+      }
+    }
+  }
+`
+
 export const GET_GROUP_CATEGORIES = gql`
   query getGroupCategories {
     category {

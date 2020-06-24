@@ -25,7 +25,7 @@ const UserSwitch = () => {
   if (error) return <Alert status="error">Error</Alert>
 
   return (
-    <Select placeholder="Giriş yap" w="auto" onChange={e => setUserId(e.target.value)} value={userId || ''}>
+    <Select placeholder="Giriş yap" w="auto" onChange={e => setUserId(Number(e.target.value))} value={userId || ''}>
       {data.user.map(u => (
         <option key={u.id} value={u.id}>
           {u.username}

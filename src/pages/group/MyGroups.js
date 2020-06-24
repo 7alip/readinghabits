@@ -13,6 +13,8 @@ import {
   TabPanels,
   TabPanel,
   IconButton,
+  Badge,
+  Text,
 } from '@chakra-ui/core'
 
 import { AuthContext } from '../../App'
@@ -36,6 +38,8 @@ const MyGroups = () => {
   if (loading) return <Spinner />
   if (error) return <Alert status="error">Error</Alert>
 
+  const createdGroups = data ? data.group.filter(g => g.creator.id === userId) : []
+  const joinedGroups = data ? data.group.filter(g => g.creator.id !== userId) : []
   return (
     <Box mt={2}>
       <IconButton
@@ -52,12 +56,22 @@ const MyGroups = () => {
       />
       <Tabs isFitted variant="line" variantColor="blue">
         <TabList mb={2}>
-          <Tab>Oluşturduklarım</Tab>
-          <Tab>Katıldıklarım</Tab>
+          <Tab>
+            <Text mr={2} fontWeight="bold">
+              Oluşturduklarım
+            </Text>
+            <Badge>{createdGroups.length}</Badge>
+          </Tab>
+          <Tab>
+            <Text mr={2} fontWeight="bold">
+              Katıldıklarım
+            </Text>
+            <Badge>{joinedGroups.length}</Badge>
+          </Tab>
         </TabList>
         <TabPanels>
-          <TabPanel>{data && <GroupCardList groups={data.group.filter(g => g.creator !== userId)} />}</TabPanel>
-          <TabPanel>{data && <GroupCardList groups={data.group.filter(g => g.creator === userId)} />}</TabPanel>
+          <TabPanel>{data && <GroupCardList groups={createdGroups} />}</TabPanel>
+          <TabPanel>{data && <GroupCardList groups={joinedGroups} />}</TabPanel>
         </TabPanels>
       </Tabs>
 

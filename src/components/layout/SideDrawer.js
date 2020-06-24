@@ -10,6 +10,7 @@ import {
   DrawerBody,
   List,
   ListItem,
+  Button,
 } from '@chakra-ui/core'
 import { Link } from 'react-router-dom'
 
@@ -44,9 +45,16 @@ const SideDrawer = ({ isOpen, onClose, btnRef }) => {
         <DrawerBody>
           <List>
             {navItems.map(item => (
-              <Link key={item.link} to={item.link}>
+              <Button
+                variant="ghost"
+                mb={1}
+                isFullWidth
+                as={Link}
+                key={item.link}
+                to={item.link}
+              >
                 <ListItem>{item.title}</ListItem>
-              </Link>
+              </Button>
             ))}
           </List>
         </DrawerBody>

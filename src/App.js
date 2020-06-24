@@ -3,9 +3,9 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 import Layout from './components/layout/Layout'
 import HomePage from './pages/Home'
-import MyGroupsPage from './pages/MyGroups'
-import SingleGroupPage from './pages/SingleGroup'
-import GroupsPage from './pages/Groups'
+import MyGroupsPage from './pages/group/MyGroups'
+import SingleGroupPage from './pages/group/SingleGroup'
+import GroupsPage from './pages/group/Groups'
 import NotFoundPage from './pages/404'
 
 export const AuthContext = createContext()

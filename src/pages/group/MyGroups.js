@@ -11,16 +11,16 @@ import {
   useDisclosure,
 } from '@chakra-ui/core'
 
-import { AuthContext } from '../App'
-import GroupCardList from '../components/group/GroupCardList'
-import CreateGroup from '../components/group/CreateGroup'
-import { GET_USER_GROUPS } from '../apollo/groupQueries'
+import { AuthContext } from '../../App'
+import GroupCardList from '../../components/group/GroupCardList'
+import CreateGroup from '../../components/group/CreateGroup'
+import { GET_USER_GROUPS } from '../../apollo/groupQueries'
 
 const MyGroups = () => {
   const { userId } = useContext(AuthContext)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const { loading, error, data, refetch } = useQuery(GET_USER_GROUPS, {
+  const { loading, error, data } = useQuery(GET_USER_GROUPS, {
     variables: { id: userId },
   })
 
@@ -43,13 +43,8 @@ const MyGroups = () => {
           Grup Olustur
         </Button>
       </Flex>
-      <CreateGroup
-        onRefetch={refetch}
-        isOpen={isOpen}
-        onClose={onClose}
-        initialRef={initialRef}
-      />
       {loading ? <Spinner /> : <GroupCardList groups={data.group} />}
+      <CreateGroup initialRef={initialRef} isOpen={isOpen} onClose={onClose} />
     </Box>
   )
 }

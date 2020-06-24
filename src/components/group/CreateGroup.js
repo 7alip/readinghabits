@@ -55,7 +55,7 @@ const CreateGroup = ({ initialRef, isOpen, onClose, userId }) => {
       creator: userId,
       start: new Date(startDate),
       end: new Date(endDate),
-      maxUser,
+      maxUser: !maxUser ? null : maxUser,
       isPrivate,
     },
     onCompleted: async result =>
@@ -66,7 +66,7 @@ const CreateGroup = ({ initialRef, isOpen, onClose, userId }) => {
               groupId: result.insert_group.returning[0].id,
               categoryId,
               minValue,
-              point,
+              point: !point ? null : point,
             },
           }),
         ),

@@ -1,34 +1,8 @@
 import React from 'react'
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { Box, Spinner, Alert, Heading } from '@chakra-ui/core'
 import GroupCardList from '../../components/group/GroupCardList'
-
-const GET_GROUPS = gql`
-  query getGroups {
-    group {
-      id
-      title
-      start_date
-      end_date
-      is_active
-      is_complete
-      is_private
-      creator {
-        username
-      }
-      fields_aggregate {
-        aggregate {
-          count
-        }
-      }
-      users_aggregate {
-        aggregate {
-          count
-        }
-      }
-    }
-  }
-`
+import { GET_GROUPS } from '../../apollo/groupQueries'
 
 const Groups = () => {
   const { loading, error, data } = useQuery(GET_GROUPS)
@@ -41,7 +15,7 @@ const Groups = () => {
       <Heading as="h1" my={5}>
         Tüm Gruplar
       </Heading>
-      <GroupCardList groups={data.group} />
+      {data && <GroupCardList groups={data.group} />}
     </Box>
   )
 }

@@ -1,18 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Box, Stack, FormControl, Select, FormLabel, Input, Button } from '@chakra-ui/core'
+import { groupCategoryFormFieldsType } from '../../types/groupTypes'
 
-const AddCategoryForm = ({ handleAddCategory, categoryField, handleSetCategory, error, loading, categories }) => {
+const AddCategoryForm = ({ onAddCategory, onSetCategory, categoryFormFields, error, loading, categories }) => {
   return (
-    <Box as="form" p={4} bg="orange.100" onSubmit={handleAddCategory}>
+    <Box as="form" p={4} bg="orange.100" onSubmit={onAddCategory}>
       <Stack spacing={2} isInline>
         <FormControl w={1 / 2}>
           <FormLabel>Kategori</FormLabel>
           <Select
             isRequired
             name="categoryId"
-            value={categoryField.categoryId}
-            onChange={e => handleSetCategory(e.target)}
+            value={categoryFormFields.categoryId}
+            onChange={e => onSetCategory(e.target)}
             placeholder="Kategori sec"
           >
             {error && <option>Hata olustu</option>}
@@ -33,8 +34,8 @@ const AddCategoryForm = ({ handleAddCategory, categoryField, handleSetCategory, 
             isRequired
             name="minValue"
             type="number"
-            value={!categoryField.minValue && categoryField.minValue === 0 ? '' : categoryField.minValue}
-            onChange={e => handleSetCategory(e.target)}
+            value={!categoryFormFields.minValue && categoryFormFields.minValue === 0 ? '' : categoryFormFields.minValue}
+            onChange={e => onSetCategory(e.target)}
           />
         </FormControl>
         <FormControl w={1 / 4}>
@@ -42,8 +43,8 @@ const AddCategoryForm = ({ handleAddCategory, categoryField, handleSetCategory, 
           <Input
             name="point"
             type="number"
-            value={!categoryField.point && categoryField.point === 0 ? '' : categoryField.point}
-            onChange={e => handleSetCategory(e.target)}
+            value={!categoryFormFields.point && categoryFormFields.point === 0 ? '' : categoryFormFields.point}
+            onChange={e => onSetCategory(e.target)}
           />
         </FormControl>
       </Stack>
@@ -55,13 +56,9 @@ const AddCategoryForm = ({ handleAddCategory, categoryField, handleSetCategory, 
 }
 
 AddCategoryForm.propTypes = {
-  handleAddCategory: PropTypes.func.isRequired,
-  handleSetCategory: PropTypes.func.isRequired,
-  categoryField: PropTypes.shape({
-    categoryId: PropTypes.number.isRequired,
-    minValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    point: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  }).isRequired,
+  onAddCategory: PropTypes.func.isRequired,
+  onSetCategory: PropTypes.func.isRequired,
+  categoryFormFields: groupCategoryFormFieldsType,
   error: PropTypes.bool,
   loading: PropTypes.bool,
   categories: PropTypes.array.isRequired,

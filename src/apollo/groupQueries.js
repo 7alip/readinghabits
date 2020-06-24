@@ -1,34 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const GET_GROUPS = gql`
-  query getGroups {
-    group {
-      id
-      title
-      start_date
-      end_date
-      is_active
-      is_complete
-      is_private
-      creator {
-        username
-      }
-      fields_aggregate {
-        aggregate {
-          count
-        }
-      }
-      users_aggregate {
-        aggregate {
-          count
-        }
-      }
-    }
-  }
-`
-
-export const GET_USER_GROUPS = gql`
-  query getUserGroups($id: Int!) {
+  query getUserGroups($id: Int) {
     group(where: { users: { user_id: { _eq: $id } } }) {
       id
       title
@@ -38,16 +11,19 @@ export const GET_USER_GROUPS = gql`
       is_complete
       is_private
       creator {
+        id
         username
       }
-      fields_aggregate {
-        aggregate {
-          count
+      users {
+        user {
+          id
+          username
         }
       }
-      users_aggregate {
-        aggregate {
-          count
+      fields {
+        category {
+          id
+          title
         }
       }
     }

@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Box, FormControl, FormLabel, Input, Stack, Switch } from '@chakra-ui/core'
+import { groupFormFieldsType } from '../../types/groupTypes'
 
-const CreateGroupForm = ({ handleChangeGroupField, initialRef, groupFields }) => {
-  const { title, startDate, endDate, maxUser, isPrivate } = groupFields
+const CreateGroupForm = ({ onChangeGroup, initialRef, groupFormFields }) => {
+  const { title, startDate, endDate, maxUser, isPrivate } = groupFormFields
 
   return (
     <Box as="form">
@@ -11,7 +12,7 @@ const CreateGroupForm = ({ handleChangeGroupField, initialRef, groupFields }) =>
         <FormLabel>Grup Basligi</FormLabel>
         <Input
           name="title"
-          onChange={handleChangeGroupField}
+          onChange={onChangeGroup}
           ref={initialRef}
           placeholder="Grup Basligi"
           value={title}
@@ -21,12 +22,12 @@ const CreateGroupForm = ({ handleChangeGroupField, initialRef, groupFields }) =>
 
       <FormControl mt={4}>
         <FormLabel>Baslangic Tarihi</FormLabel>
-        <Input name="startDate" value={startDate} onChange={handleChangeGroupField} type="date" isRequired />
+        <Input name="startDate" value={startDate} onChange={onChangeGroup} type="date" isRequired />
       </FormControl>
 
       <FormControl mt={4}>
         <FormLabel>Bitis Tarihi</FormLabel>
-        <Input name="endDate" value={endDate} onChange={handleChangeGroupField} type="date" />
+        <Input name="endDate" value={endDate} onChange={onChangeGroup} type="date" />
       </FormControl>
 
       <Stack spacing={4} isInline mt={4}>
@@ -35,20 +36,13 @@ const CreateGroupForm = ({ handleChangeGroupField, initialRef, groupFields }) =>
           <Input
             name="maxUser"
             value={!maxUser && maxUser === 0 ? '' : maxUser}
-            onChange={handleChangeGroupField}
+            onChange={onChangeGroup}
             type="number"
           />
         </FormControl>
         <FormControl mx="auto">
           <FormLabel>Özel grup</FormLabel>
-          <Switch
-            d="block"
-            size="lg"
-            name="isPrivate"
-            value={isPrivate}
-            onChange={handleChangeGroupField}
-            type="date"
-          />
+          <Switch d="block" size="lg" name="isPrivate" value={isPrivate} onChange={onChangeGroup} type="date" />
         </FormControl>
       </Stack>
     </Box>
@@ -56,15 +50,9 @@ const CreateGroupForm = ({ handleChangeGroupField, initialRef, groupFields }) =>
 }
 
 CreateGroupForm.propTypes = {
-  handleChangeGroupField: PropTypes.func.isRequired,
+  onChangeGroup: PropTypes.func.isRequired,
   initialRef: PropTypes.object.isRequired,
-  groupFields: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    startDate: PropTypes.string.isRequired,
-    endDate: PropTypes.string,
-    maxUser: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    isPrivate: PropTypes.bool,
-  }).isRequired,
+  groupFormFields: groupFormFieldsType,
 }
 
 export default CreateGroupForm

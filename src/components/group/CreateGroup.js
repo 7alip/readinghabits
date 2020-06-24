@@ -14,13 +14,13 @@ import {
 } from '@chakra-ui/core'
 import { useMutation, useQuery } from '@apollo/client'
 import { CREATE_GROUP, ADD_GROUP_CATEGORY } from '../../apollo/groupMutations'
-import { GET_GROUP_CATEGORIES, GET_USER_GROUPS } from '../../apollo/groupQueries'
+import { GET_GROUP_CATEGORIES, GET_GROUPS } from '../../apollo/groupQueries'
 import DisplayCreatedGroupInfo from './DisplayCreatedGroupInfo'
 import DisplayAddedCategoriesInfo from './DisplayAddedCategoriesInfo'
 import AddCategoryForm from './AddCategoryForm'
 import CreateGroupForm from './CreateGroupForm'
 
-const initialGroupFields = {
+const initialGroupFormFields = {
   title: '',
   startDate: new Date().toISOString().substr(0, 10),
   endDate: '',
@@ -28,25 +28,25 @@ const initialGroupFields = {
   isPrivate: false,
 }
 
-const initialCategoryFields = {
+const initialCategoryFormFields = {
   categoryId: 0,
   minValue: '',
   point: '',
 }
 
 const CreateGroup = ({ initialRef, isOpen, onClose, userId }) => {
-  const [groupFields, setGroupFields] = useState(initialGroupFields)
-  const [categoryFields, setCategoryFields] = useState([])
-  const [currentCategoryField, setCurrentCategoryField] = useState(initialCategoryFields)
+  const [groupFormFields, setGroupFormFields] = useState(initialGroupFormFields)
+  const [categoryFormFields, setCategoryFormFields] = useState([])
+  const [currentCategoryFormFields, setCurrentCategoryFormFields] = useState(initialCategoryFormFields)
   const [step, setStep] = useState(1)
 
-  const { title, startDate, endDate, maxUser, isPrivate } = groupFields
+  const { title, startDate, endDate, maxUser, isPrivate } = groupFormFields
 
   const { loading: loadingGetCategory, error: errorGetCategory, data: dataGetCategory } = useQuery(GET_GROUP_CATEGORIES)
 
   const [onAddCategory, { loading: loadingAddCategory, error: errorAddCategory }] = useMutation(ADD_GROUP_CATEGORY, {
     onCompleted: () => onClose(),
-    refetchQueries: [{ query: GET_USER_GROUPS, variables: { id: userId } }],
+    refetchQueries: [{ query: GET_GROUPS, variables: { id: userId } }],
   })
 
   const [onCreateGroup, { loading: loadingCreateGroup, error: errorCreateGroup }] = useMutation(CREATE_GROUP, {
@@ -60,7 +60,7 @@ const CreateGroup = ({ initialRef, isOpen, onClose, userId }) => {
     },
     onCompleted: async result =>
       await Promise.all(
-        categoryFields.map(({ categoryId, minValue, point }) =>
+        categoryFormFields.map(({ categoryId, minValue, point }) =>
           onAddCategory({
             variables: {
               groupId: result.insert_group.returning[0].id,
@@ -71,17 +71,16 @@ const CreateGroup = ({ initialRef, isOpen, onClose, userId }) => {
           }),
         ),
       ),
-    refetchQueries: [{ query: GET_USER_GROUPS, variables: { id: userId } }],
   })
 
-  const handleChangeGroupField = e => {
+  const handleChangeGroup = e => {
     const { name, value, type } = e.target
     if (name === 'isPrivate')
-      return setGroupFields({
-        ...groupFields,
-        isPrivate: !groupFields.isPrivate,
+      return setGroupFormFields({
+        ...groupFormFields,
+        isPrivate: !groupFormFields.isPrivate,
       })
-    setGroupFields({ ...groupFields, [name]: type === 'number' ? Number(value) : value })
+    setGroupFormFields({ ...groupFormFields, [name]: type === 'number' ? Number(value) : value })
   }
 
   // const handleChangeCategory = ({ name, value }, i) => {
@@ -94,13 +93,13 @@ const CreateGroup = ({ initialRef, isOpen, onClose, userId }) => {
   // }
 
   const handleSetCategory = ({ name, value }) => {
-    setCurrentCategoryField({ ...currentCategoryField, [name]: Number(value) })
+    setCurrentCategoryFormFields({ ...currentCategoryFormFields, [name]: Number(value) })
   }
 
   const handleAddCategory = e => {
     e.preventDefault()
-    setCategoryFields([...categoryFields, currentCategoryField])
-    setCurrentCategoryField(initialCategoryFields)
+    setCategoryFormFields([...categoryFormFields, currentCategoryFormFields])
+    setCurrentCategoryFormFields(initialCategoryFormFields)
   }
 
   return (
@@ -119,25 +118,25 @@ const CreateGroup = ({ initialRef, isOpen, onClose, userId }) => {
           <AddCategoryForm
             error={errorGetCategory}
             loading={loadingGetCategory}
-            handleAddCategory={handleAddCategory}
-            handleSetCategory={handleSetCategory}
+            onAddCategory={handleAddCategory}
+            onSetCategory={handleSetCategory}
             categories={dataGetCategory.category}
-            categoryField={currentCategoryField}
+            categoryFormFields={currentCategoryFormFields}
           />
         )}
         <Stack alignItems="space-between" as={ModalBody} borderWidth="1px" borderColor="gray.200">
           {step === 1 && (
             <CreateGroupForm
               initialRef={initialRef}
-              handleChangeGroupField={handleChangeGroupField}
-              groupFields={groupFields}
+              onChangeGroup={handleChangeGroup}
+              groupFormFields={groupFormFields}
             />
           )}
 
           {step === 2 && (
             <>
-              <DisplayCreatedGroupInfo groupFields={groupFields} />
-              <DisplayAddedCategoriesInfo categoryFields={categoryFields} categories={dataGetCategory.category} />
+              <DisplayCreatedGroupInfo groupFields={groupFormFields} />
+              <DisplayAddedCategoriesInfo categoryFields={categoryFormFields} categories={dataGetCategory.category} />
             </>
           )}
         </Stack>
@@ -165,7 +164,7 @@ const CreateGroup = ({ initialRef, isOpen, onClose, userId }) => {
               mr={2}
               rightIcon="chevron-right"
               onClick={() => setStep(2)}
-              isDisabled={!groupFields.title}
+              isDisabled={!groupFormFields.title}
             >
               Sonraki
             </Button>

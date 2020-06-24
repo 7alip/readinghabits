@@ -6,7 +6,6 @@ import {
   Alert,
   Box,
   Heading,
-  Flex,
   useDisclosure,
   Tabs,
   TabList,
@@ -19,13 +18,13 @@ import {
 import { AuthContext } from '../../App'
 import GroupCardList from '../../components/group/GroupCardList'
 import CreateGroup from '../../components/group/CreateGroup'
-import { GET_USER_GROUPS } from '../../apollo/groupQueries'
+import { GET_GROUPS } from '../../apollo/groupQueries'
 
 const MyGroups = () => {
   const { userId } = useContext(AuthContext)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const [onGetUserGroups, { loading, error, data }] = useLazyQuery(GET_USER_GROUPS)
+  const [onGetUserGroups, { loading, error, data }] = useLazyQuery(GET_GROUPS)
 
   useEffect(() => {
     if (userId) onGetUserGroups({ variables: { id: userId } })
@@ -61,9 +60,8 @@ const MyGroups = () => {
           <TabPanel>{data && <GroupCardList groups={data.group.filter(g => g.creator === userId)} />}</TabPanel>
         </TabPanels>
       </Tabs>
-      <Flex justify="space-between" align="center"></Flex>
 
-      {isOpen && <CreateGroup userId={Number(userId)} initialRef={initialRef} isOpen={isOpen} onClose={onClose} />}
+      {isOpen && <CreateGroup userId={userId} initialRef={initialRef} isOpen={isOpen} onClose={onClose} />}
     </Box>
   )
 }

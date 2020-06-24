@@ -3,16 +3,7 @@ import PropTypes from 'prop-types'
 
 import { Heading, Text, Tag, Stack } from '@chakra-ui/core'
 
-const GroupCard = ({
-  title,
-  is_active,
-  is_complete,
-  is_private,
-  start_date,
-  end_date,
-  fields_count,
-  users_count,
-}) => {
+const GroupCard = ({ title, is_active, is_complete, is_private, start_date, end_date, fields_count, users_count }) => {
   return (
     <Stack spacing={2} p={3} boxShadow="sm" bg="white">
       <Heading size="lg">{title}</Heading>

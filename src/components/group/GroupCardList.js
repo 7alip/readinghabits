@@ -9,13 +9,7 @@ const GroupCardList = ({ groups }) => {
   return (
     <Flex wrap="wrap" mx={-2}>
       {groups.map(group => (
-        <Box
-          p={2}
-          w={['full', null, 1 / 2]}
-          key={group.id}
-          as={Link}
-          to={`/groups/${group.id}`}
-        >
+        <Box p={2} w={['full', null, 1 / 2]} key={group.id} as={Link} to={`/groups/${group.id}`}>
           <GroupCard
             title={group.title}
             start_date={group.start_date}

@@ -30,20 +30,8 @@ export const CREATE_GROUP = gql`
 `
 
 export const ADD_GROUP_CATEGORY = gql`
-  mutation addGroupCategory(
-    $categoryId: Int!
-    $groupId: Int!
-    $minValue: Int!
-    $point: Int
-  ) {
-    insert_group_field(
-      objects: {
-        category_id: $categoryId
-        group_id: $groupId
-        min_value: $minValue
-        point: $point
-      }
-    ) {
+  mutation addGroupCategory($categoryId: Int!, $groupId: Int!, $minValue: Int!, $point: Int) {
+    insert_group_field(objects: { category_id: $categoryId, group_id: $groupId, min_value: $minValue, point: $point }) {
       affected_rows
     }
   }

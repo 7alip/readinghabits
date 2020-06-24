@@ -1,15 +1,6 @@
 import React from 'react'
 import { gql, useQuery } from '@apollo/client'
-import {
-  Box,
-  Spinner,
-  Alert,
-  Stack,
-  Heading,
-  Tag,
-  Text,
-  Button,
-} from '@chakra-ui/core'
+import { Box, Spinner, Alert, Stack, Heading, Tag, Text, Button } from '@chakra-ui/core'
 import { Link, useParams } from 'react-router-dom'
 
 const GET_GROUP_BY_ID = gql`
@@ -49,26 +40,11 @@ const SingleGroup = () => {
 
   if (!data.group_by_pk) return <Alert status="error">Grup bulunamadi!</Alert>
 
-  const {
-    title,
-    is_active,
-    is_private,
-    is_complete,
-    end_date,
-    start_date,
-    users,
-    fields,
-  } = data.group_by_pk
+  const { title, is_active, is_private, is_complete, end_date, start_date, users, fields } = data.group_by_pk
 
   return (
     <Stack spacing={5}>
-      <Button
-        variantColor="teal"
-        as={Link}
-        to="/groups"
-        alignSelf="flex-start"
-        leftIcon="arrow-back"
-      >
+      <Button variantColor="teal" as={Link} to="/groups" alignSelf="flex-start" leftIcon="arrow-back">
         Tüm Gruplar
       </Button>
       <Heading my={5}>{title}</Heading>

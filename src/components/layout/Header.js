@@ -23,13 +23,7 @@ const Header = ({ onOpen, btnRef }) => {
     >
       <UserSwitch />
       {userId && <Button onClick={() => setUserId(null)}>Çıkış yap</Button>}
-      <IconButton
-        variant="outline"
-        variantColor="gray"
-        icon={AiOutlineMenu}
-        ref={btnRef}
-        onClick={onOpen}
-      />
+      <IconButton variant="outline" variantColor="gray" icon={AiOutlineMenu} ref={btnRef} onClick={onOpen} />
     </Flex>
   )
 }

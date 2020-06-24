@@ -31,12 +31,7 @@ const navItems = [
 
 const SideDrawer = ({ isOpen, onClose, btnRef }) => {
   return (
-    <Drawer
-      isOpen={isOpen}
-      placement="right"
-      onClose={onClose}
-      finalFocusRef={btnRef}
-    >
+    <Drawer isOpen={isOpen} placement="right" onClose={onClose} finalFocusRef={btnRef}>
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
@@ -45,14 +40,7 @@ const SideDrawer = ({ isOpen, onClose, btnRef }) => {
         <DrawerBody>
           <List>
             {navItems.map(item => (
-              <Button
-                variant="ghost"
-                mb={1}
-                isFullWidth
-                as={Link}
-                key={item.link}
-                to={item.link}
-              >
+              <Button variant="ghost" mb={1} isFullWidth as={Link} key={item.link} to={item.link}>
                 <ListItem>{item.title}</ListItem>
               </Button>
             ))}

@@ -1,15 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 
 import { useLazyQuery } from '@apollo/client'
-import {
-  Spinner,
-  Alert,
-  Box,
-  Heading,
-  Flex,
-  Button,
-  useDisclosure,
-} from '@chakra-ui/core'
+import { Spinner, Alert, Box, Heading, Flex, Button, useDisclosure } from '@chakra-ui/core'
 
 import { AuthContext } from '../../App'
 import GroupCardList from '../../components/group/GroupCardList'
@@ -20,9 +12,7 @@ const MyGroups = () => {
   const { userId } = useContext(AuthContext)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const [onGetUserGroups, { loading, error, data }] = useLazyQuery(
-    GET_USER_GROUPS,
-  )
+  const [onGetUserGroups, { loading, error, data }] = useLazyQuery(GET_USER_GROUPS)
 
   useEffect(() => {
     if (userId) onGetUserGroups({ variables: { id: userId } })
@@ -40,24 +30,12 @@ const MyGroups = () => {
         <Heading as="h1" my={5}>
           Gruplarim
         </Heading>
-        <Button
-          isDisabled={!userId}
-          variantColor="blue"
-          leftIcon="add"
-          onClick={onOpen}
-        >
+        <Button isDisabled={!userId} variantColor="blue" leftIcon="add" onClick={onOpen}>
           Yeni Grup
         </Button>
       </Flex>
       {data && <GroupCardList groups={data.group} />}
-      {isOpen && (
-        <CreateGroup
-          userId={userId}
-          initialRef={initialRef}
-          isOpen={isOpen}
-          onClose={onClose}
-        />
-      )}
+      {isOpen && <CreateGroup userId={Number(userId)} initialRef={initialRef} isOpen={isOpen} onClose={onClose} />}
     </Box>
   )
 }

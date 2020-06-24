@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
   const btnRef = useRef()
 
   return (
-    <Stack minH="100vh" bg="gray.100">
+    <Stack minH="100vh">
       <Header onOpen={onOpen} btnRef={btnRef} />
 
       <Box flex={1} px={4}>

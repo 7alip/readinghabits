@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useQuery, gql } from '@apollo/client'
 import { Spinner, Alert, Select } from '@chakra-ui/core'
 
@@ -16,6 +16,10 @@ const GET_USERS = gql`
 const UserSwitch = () => {
   const { userId, setUserId } = useContext(AuthContext)
   const { loading, error, data } = useQuery(GET_USERS)
+
+  useEffect(() => {
+    setUserId(1)
+  }, [setUserId])
 
   if (loading) return <Spinner />
   if (error) return <Alert status="error">Error</Alert>

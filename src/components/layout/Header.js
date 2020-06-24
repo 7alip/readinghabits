@@ -19,7 +19,6 @@ const Header = ({ onOpen, btnRef }) => {
       justify="space-between"
       position="sticky"
       top={0}
-      bg="white"
     >
       <UserSwitch />
       {userId && <Button onClick={() => setUserId(null)}>Çıkış yap</Button>}

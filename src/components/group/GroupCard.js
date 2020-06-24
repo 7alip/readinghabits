@@ -1,16 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
+import moment from 'moment'
+import 'moment/locale/tr'
 import { Heading, Text, Tag, Stack } from '@chakra-ui/core'
 
 const GroupCard = ({ title, is_active, is_complete, is_private, start_date, end_date, fields_count, users_count }) => {
   return (
-    <Stack spacing={2} p={3} boxShadow="sm" bg="white">
+    <Stack h="full" spacing={2} p={4} boxShadow="sm">
       <Heading size="lg">{title}</Heading>
-      <Text>
-        {start_date}
-        {end_date && '-' + end_date}
-      </Text>
+      <Text>{moment(start_date).fromNow()} kuruldu.</Text>
+      {end_date && <Text>{moment(end_date).fromNow()} tamamlanacak.</Text>}
       <Stack isInline spacing={2}>
         <Tag size="sm">{fields_count} Kategori</Tag>
         <Tag size="sm">{users_count} Kullanici</Tag>

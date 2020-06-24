@@ -54,7 +54,7 @@ const CreateGroup = ({ initialRef, isOpen, onClose, userId }) => {
       title,
       creator: userId,
       start: new Date(startDate),
-      end: new Date(endDate),
+      end: !endDate ? null : new Date(endDate),
       maxUser: !maxUser ? null : maxUser,
       isPrivate,
     },
@@ -71,6 +71,7 @@ const CreateGroup = ({ initialRef, isOpen, onClose, userId }) => {
           }),
         ),
       ),
+    refetchQueries: [{ query: GET_USER_GROUPS, variables: { id: userId } }],
   })
 
   const handleChangeGroupField = e => {

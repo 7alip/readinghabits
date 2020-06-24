@@ -1,7 +1,20 @@
 import React, { useContext, useEffect } from 'react'
 
 import { useLazyQuery } from '@apollo/client'
-import { Spinner, Alert, Box, Heading, Flex, Button, useDisclosure } from '@chakra-ui/core'
+import {
+  Spinner,
+  Alert,
+  Box,
+  Heading,
+  Flex,
+  useDisclosure,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  IconButton,
+} from '@chakra-ui/core'
 
 import { AuthContext } from '../../App'
 import GroupCardList from '../../components/group/GroupCardList'
@@ -25,16 +38,31 @@ const MyGroups = () => {
   if (error) return <Alert status="error">Error</Alert>
 
   return (
-    <Box>
-      <Flex justify="space-between" align="center">
-        <Heading as="h1" my={5}>
-          Gruplarim
-        </Heading>
-        <Button isDisabled={!userId} variantColor="blue" leftIcon="add" onClick={onOpen}>
-          Yeni Grup
-        </Button>
-      </Flex>
-      {data && <GroupCardList groups={data.group} />}
+    <Box mt={2}>
+      <IconButton
+        isRound
+        pos="fixed"
+        bottom={5}
+        right={5}
+        size="lg"
+        ml={2}
+        isDisabled={!userId}
+        variantColor="green"
+        icon="add"
+        onClick={onOpen}
+      />
+      <Tabs isFitted variant="line" variantColor="blue">
+        <TabList mb={2}>
+          <Tab>Oluşturduklarım</Tab>
+          <Tab>Katıldıklarım</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>{data && <GroupCardList groups={data.group.filter(g => g.creator !== userId)} />}</TabPanel>
+          <TabPanel>{data && <GroupCardList groups={data.group.filter(g => g.creator === userId)} />}</TabPanel>
+        </TabPanels>
+      </Tabs>
+      <Flex justify="space-between" align="center"></Flex>
+
       {isOpen && <CreateGroup userId={Number(userId)} initialRef={initialRef} isOpen={isOpen} onClose={onClose} />}
     </Box>
   )

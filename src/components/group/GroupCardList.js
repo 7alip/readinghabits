@@ -7,7 +7,7 @@ import GroupCard from './GroupCard'
 
 const GroupCardList = ({ groups }) => {
   return (
-    <Flex wrap="wrap" mx={-2}>
+    <Flex wrap="wrap" mx={-2} alignItems="stretch">
       {groups.map(group => (
         <Box p={2} w={['full', null, 1 / 2]} key={group.id} as={Link} to={`/groups/${group.id}`}>
           <GroupCard

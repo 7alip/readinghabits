@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import {
   Modal,
@@ -15,14 +15,14 @@ import {
   Switch,
   Alert,
   Box,
-  Flex,
-  Divider,
   Select,
   Stack,
-  IconButton,
+  Heading,
+  Text,
+  Tag,
+  TagLabel,
 } from '@chakra-ui/core'
 import { useMutation, useQuery } from '@apollo/client'
-import { AuthContext } from '../../App'
 import { CREATE_GROUP, ADD_GROUP_CATEGORY } from '../../apollo/groupMutations'
 import {
   GET_GROUP_CATEGORIES,
@@ -43,18 +43,15 @@ const initialCategoryFields = {
   point: '',
 }
 
-const CreateGroup = ({ initialRef, isOpen, onClose }) => {
-  const { userId } = useContext(AuthContext)
-
+const CreateGroup = ({ initialRef, isOpen, onClose, userId }) => {
   const [groupFields, setGroupFields] = useState(initialGroupFields)
-  const [categoryFields, setCategoryFields] = useState([initialCategoryFields])
+  const [categoryFields, setCategoryFields] = useState([])
+  const [currentCategoryField, setCurrentCategoryField] = useState(
+    initialCategoryFields,
+  )
+  const [step, setStep] = useState(1)
 
   const { title, startDate, endDate, maxUser, isPrivate } = groupFields
-
-  useEffect(() => {
-    console.log('categoryFields', categoryFields)
-    console.log('groupFields', groupFields)
-  }, [categoryFields, groupFields])
 
   const {
     loading: loadingGetCategory,
@@ -79,7 +76,7 @@ const CreateGroup = ({ initialRef, isOpen, onClose }) => {
       creator: userId,
       start: new Date(startDate),
       end: new Date(endDate),
-      maxUser,
+      maxUser: Number(maxUser),
       isPrivate,
     },
     onCompleted: async result =>
@@ -88,9 +85,9 @@ const CreateGroup = ({ initialRef, isOpen, onClose }) => {
           onAddCategory({
             variables: {
               groupId: result.insert_group.returning[0].id,
-              categoryId,
-              minValue,
-              point,
+              categoryId: Number(categoryId),
+              minValue: Number(minValue),
+              point: Number(point),
             },
           }),
         ),
@@ -107,13 +104,84 @@ const CreateGroup = ({ initialRef, isOpen, onClose }) => {
     setGroupFields({ ...groupFields, [name]: value })
   }
 
-  const handleAddCategory = ({ name, value }, i) => {
-    const fields = [
-      ...categoryFields.slice(0, i),
-      { ...categoryFields[i], [name]: value },
-    ]
-    setCategoryFields(fields)
+  // const handleChangeCategory = ({ name, value }, i) => {
+  //   setCurrentCategoryField(categoryFields[i])
+  //   const fields = [
+  //     ...categoryFields.slice(0, i),
+  //     { ...categoryFields[i], [name]: value },
+  //   ]
+  //   setCategoryFields(fields)
+  // }
+
+  const handleSetCategory = ({ name, value }) => {
+    setCurrentCategoryField({ ...currentCategoryField, [name]: value })
   }
+
+  const handleAddCategory = e => {
+    e.preventDefault()
+    setCategoryFields([...categoryFields, currentCategoryField])
+    setCurrentCategoryField(initialCategoryFields)
+  }
+
+  const DisplayAddedCategoriesInfo = () =>
+    categoryFields.length > 0 && (
+      <>
+        <Heading size="md" my={3}>
+          Kategoriler
+        </Heading>
+        <Box as="table">
+          <Box
+            fontWeight="bold"
+            as="thead"
+            borderBottomWidth="1px"
+            borderBottomColor="gray.200"
+          >
+            <tr>
+              <td>Kategori</td>
+              <td>Min deger</td>
+              <td>Puan</td>
+            </tr>
+          </Box>
+          <Box as="tbody">
+            {categoryFields.map(category => (
+              <tr key={category.categoryId}>
+                <td>
+                  {
+                    dataGetCategory.category.find(
+                      c => c.id === Number(category.categoryId),
+                    ).title
+                  }
+                </td>
+                <td>{category.minValue}</td>
+                <td>{category.point || 'Belirlenmedi'}</td>
+              </tr>
+            ))}
+          </Box>
+        </Box>
+      </>
+    )
+
+  const DisplayCreatedGroupInfo = () => (
+    <>
+      <Heading size="lg" my={3}>
+        {groupFields.title}{' '}
+        <Tag size="sm">
+          <TagLabel>{groupFields.isPrivate ? 'Ozel' : 'Acik'}</TagLabel>
+        </Tag>
+      </Heading>
+      <Text>
+        <strong>Baslangic:</strong> {groupFields.startDate}
+      </Text>
+
+      <Text>
+        <strong>Bitis:</strong> {groupFields.endDate || 'Belirlenmedi'}
+      </Text>
+      <Text>
+        <strong>Maksimum katilimci:</strong>{' '}
+        {groupFields.maxUser || 'Belirlenmedi'}
+      </Text>
+    </>
+  )
 
   return (
     <Modal
@@ -127,128 +195,169 @@ const CreateGroup = ({ initialRef, isOpen, onClose }) => {
       <ModalContent>
         <ModalHeader>Yeni Grup Olustur</ModalHeader>
         <ModalCloseButton />
-        <ModalBody pb={6}>
-          <Box as="form">
-            <FormControl>
-              <FormLabel>Grup Basligi</FormLabel>
-              <Input
-                name="title"
-                onChange={handleChangeGroupField}
-                ref={initialRef}
-                placeholder="Grup Basligi"
-                value={title}
-                isRequired
-              />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Baslangic Tarihi</FormLabel>
-              <Input
-                name="startDate"
-                value={startDate}
-                onChange={handleChangeGroupField}
-                type="date"
-                isRequired
-              />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Bitis Tarihi</FormLabel>
-              <Input
-                name="endDate"
-                value={endDate}
-                onChange={handleChangeGroupField}
-                type="date"
-              />
-            </FormControl>
-
-            <Flex mt={4} justify="space-between" align="center">
-              <FormControl mr={4}>
-                <FormLabel>Maksimum Kisi</FormLabel>
+        <Stack
+          alignItems="space-between"
+          as={ModalBody}
+          borderWidth="1px"
+          borderColor="gray.200"
+        >
+          {/* Create Group Form */}
+          {step === 1 && (
+            <Box as="form">
+              <FormControl>
+                <FormLabel>Grup Basligi</FormLabel>
                 <Input
-                  name="maxUser"
-                  value={maxUser}
+                  name="title"
                   onChange={handleChangeGroupField}
-                  type="number"
+                  ref={initialRef}
+                  placeholder="Grup Basligi"
+                  value={title}
+                  isRequired
                 />
               </FormControl>
-              <FormControl>
-                <FormLabel>Ozel grup</FormLabel>
-                <Switch
-                  name="isPrivate"
-                  mr={3}
-                  value={isPrivate}
+
+              <FormControl mt={4}>
+                <FormLabel>Baslangic Tarihi</FormLabel>
+                <Input
+                  name="startDate"
+                  value={startDate}
+                  onChange={handleChangeGroupField}
+                  type="date"
+                  isRequired
+                />
+              </FormControl>
+
+              <FormControl mt={4}>
+                <FormLabel>Bitis Tarihi</FormLabel>
+                <Input
+                  name="endDate"
+                  value={endDate}
                   onChange={handleChangeGroupField}
                   type="date"
                 />
               </FormControl>
-            </Flex>
-          </Box>
-          <Divider my={3} />
-          {categoryFields.map((field, i) => (
-            <Box key={i}>
-              <FormControl>
-                <FormLabel>Kategori</FormLabel>
-                <Select
-                  name="categoryId"
-                  value={field.categoryId}
-                  onChange={e => handleAddCategory(e.target, i)}
-                  placeholder="Kategori"
-                >
-                  {errorGetCategory && <option>Hata olustu</option>}
-                  {loadingGetCategory ? (
-                    <option>Yukleniyor</option>
-                  ) : (
-                    dataGetCategory.category.map(({ id, title }) => (
-                      <option key={id} value={id}>
-                        {title}
-                      </option>
-                    ))
-                  )}
-                </Select>
-              </FormControl>
-              <Stack align="center" isInline spacing={2} mt={3}>
+
+              <Stack spacing={4} isInline mt={4}>
                 <FormControl>
-                  <FormLabel>Min Sayfa</FormLabel>
+                  <FormLabel>Maksimum Kisi</FormLabel>
                   <Input
-                    name="minValue"
+                    name="maxUser"
+                    value={maxUser}
+                    onChange={handleChangeGroupField}
                     type="number"
-                    value={field.minValue}
-                    onChange={e => handleAddCategory(e.target, i)}
                   />
                 </FormControl>
-                <FormControl>
-                  <FormLabel>Puan</FormLabel>
-                  <Input
-                    name="point"
-                    type="number"
-                    value={field.point}
-                    onChange={e => handleAddCategory(e.target, i)}
+                <FormControl mx="auto">
+                  <FormLabel>Özel grup</FormLabel>
+                  <Switch
+                    d="block"
+                    size="lg"
+                    name="isPrivate"
+                    value={isPrivate}
+                    onChange={handleChangeGroupField}
+                    type="date"
                   />
                 </FormControl>
-                <IconButton
-                  alignSelf="flex-end"
-                  variantColor="green"
-                  isRound
-                  icon="add"
-                  onClick={() => {
-                    setCategoryFields(prev => [...prev, initialCategoryFields])
-                  }}
-                />
               </Stack>
             </Box>
-          ))}
-        </ModalBody>
+          )}
+
+          {/* Add Category Form */}
+          {step === 2 && (
+            <>
+              <DisplayCreatedGroupInfo />
+              <DisplayAddedCategoriesInfo />
+              <Box
+                as="form"
+                p={4}
+                mt="auto"
+                mx={-4}
+                bg="orange.100"
+                onSubmit={handleAddCategory}
+              >
+                <Stack spacing={2} isInline>
+                  <FormControl w={1 / 2}>
+                    <FormLabel>Kategori</FormLabel>
+                    <Select
+                      isRequired
+                      name="categoryId"
+                      value={currentCategoryField.categoryId}
+                      onChange={e => handleSetCategory(e.target)}
+                      placeholder="Kategori sec"
+                    >
+                      {errorGetCategory && <option>Hata olustu</option>}
+                      {loadingGetCategory ? (
+                        <option>Yukleniyor</option>
+                      ) : (
+                        dataGetCategory.category.map(({ id, title }) => (
+                          <option key={id} value={id}>
+                            {title}
+                          </option>
+                        ))
+                      )}
+                    </Select>
+                  </FormControl>
+                  <FormControl w={1 / 4}>
+                    <FormLabel>Minimum</FormLabel>
+                    <Input
+                      isRequired
+                      name="minValue"
+                      type="number"
+                      value={currentCategoryField.minValue}
+                      onChange={e => handleSetCategory(e.target)}
+                    />
+                  </FormControl>
+                  <FormControl w={1 / 4}>
+                    <FormLabel>Puan</FormLabel>
+                    <Input
+                      name="point"
+                      type="number"
+                      value={currentCategoryField.point}
+                      onChange={e => handleSetCategory(e.target)}
+                    />
+                  </FormControl>
+                </Stack>
+                <Button type="submit" variantColor="blue" isFullWidth mt={2}>
+                  Ekle
+                </Button>
+              </Box>
+            </>
+          )}
+        </Stack>
 
         <ModalFooter>
-          <Button
-            isLoading={loadingCreateGroup || loadingAddCategory}
-            onClick={onCreateGroup}
-            variantColor="blue"
-            mr={3}
-          >
-            Kaydet ve Kategori Ekle
-          </Button>
+          {step === 2 && (
+            <>
+              <Button
+                mr={2}
+                isLoading={loadingCreateGroup || loadingAddCategory}
+                onClick={onCreateGroup}
+                variantColor="blue"
+                leftIcon="check"
+              >
+                Kaydet
+              </Button>
+              <Button
+                variantColor="orange"
+                mr={2}
+                leftIcon="chevron-left"
+                onClick={() => setStep(1)}
+              >
+                Onceki
+              </Button>
+            </>
+          )}
+          {step === 1 && (
+            <Button
+              variantColor="orange"
+              mr={2}
+              rightIcon="chevron-right"
+              onClick={() => setStep(2)}
+              isDisabled={!groupFields.title}
+            >
+              Sonraki
+            </Button>
+          )}
           <Button onClick={onClose}>Vazgec</Button>
         </ModalFooter>
         {(errorAddCategory || errorCreateGroup) && (
@@ -263,6 +372,7 @@ CreateGroup.propTypes = {
   initialRef: PropTypes.object.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  userId: PropTypes.number.isRequired,
 }
 
 export default CreateGroup

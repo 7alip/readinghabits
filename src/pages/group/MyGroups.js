@@ -1,6 +1,6 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 
-import { useQuery } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import {
   Spinner,
   Alert,
@@ -20,12 +20,18 @@ const MyGroups = () => {
   const { userId } = useContext(AuthContext)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const { loading, error, data } = useQuery(GET_USER_GROUPS, {
-    variables: { id: userId },
-  })
+  const [onGetUserGroups, { loading, error, data }] = useLazyQuery(
+    GET_USER_GROUPS,
+  )
+
+  useEffect(() => {
+    if (userId) onGetUserGroups({ variables: { id: userId } })
+  }, [userId, onGetUserGroups])
 
   const initialRef = React.useRef()
 
+  if (!userId) return <Heading>Giris yapiniz</Heading>
+  if (loading) return <Spinner />
   if (error) return <Alert status="error">Error</Alert>
 
   return (
@@ -35,16 +41,23 @@ const MyGroups = () => {
           Gruplarim
         </Heading>
         <Button
-          variant="outline"
-          variantColor="teal"
+          isDisabled={!userId}
+          variantColor="blue"
           leftIcon="add"
           onClick={onOpen}
         >
-          Grup Olustur
+          Yeni Grup
         </Button>
       </Flex>
-      {loading ? <Spinner /> : <GroupCardList groups={data.group} />}
-      <CreateGroup initialRef={initialRef} isOpen={isOpen} onClose={onClose} />
+      {data && <GroupCardList groups={data.group} />}
+      {isOpen && (
+        <CreateGroup
+          userId={userId}
+          initialRef={initialRef}
+          isOpen={isOpen}
+          onClose={onClose}
+        />
+      )}
     </Box>
   )
 }

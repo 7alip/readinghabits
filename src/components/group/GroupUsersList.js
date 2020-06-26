@@ -4,7 +4,7 @@ import { Stack, Heading, Text, Avatar, Flex, Box } from '@chakra-ui/core'
 
 const GroupUsersList = ({ users }) => {
   return (
-    <Box flex={1} p={3} boxShadow="sm">
+    <Box bg="white" flex={1} p={3} boxShadow="sm">
       <Heading size="md" mb={3}>
         Kullanicilar
       </Heading>

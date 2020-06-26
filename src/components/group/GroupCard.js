@@ -17,7 +17,7 @@ const GroupCard = ({ group }) => {
   const isCreator = creator.id === userId
 
   return (
-    <Stack h="full" spacing={2} p={4} boxShadow="sm">
+    <Stack bg="white" h="full" spacing={2} p={4} boxShadow="sm">
       <Heading size="lg">
         {title}{' '}
         {(isJoined || isCreator) && (

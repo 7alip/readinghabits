@@ -4,9 +4,9 @@ import { Stack, Heading, PseudoBox } from '@chakra-ui/core'
 
 const GroupCategoryTable = ({ categories }) => {
   return (
-    <Stack p={3} boxShadow="sm">
+    <Stack bg="white" p={3} boxShadow="sm">
       <Heading size="md">Kategoriler</Heading>
-      <PseudoBox as="table">
+      <PseudoBox as="table" borderWidth="1px" borderColor="gray.200">
         <thead>
           <tr>
             <th>Kategori Adi</th>

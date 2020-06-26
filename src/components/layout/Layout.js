@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
     <Stack minH="100vh">
       <Header onOpen={onOpen} btnRef={btnRef} />
 
-      <Box flex={1} px={4}>
+      <Box bg="#fafcfb" flex={1} px={4}>
         {children}
       </Box>
 

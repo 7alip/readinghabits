@@ -62,16 +62,16 @@ const SingleGroup = () => {
           Duzenle
         </Button>
       )}
-      <Box my={5}>
+      <Box bg="white" p={3} my={2} boxShadow="sm">
         <Text>Baslama Tarihi: {start_date}</Text>
         <Text>Bitis Tarihi: {end_date ? end_date : 'Belirlenmedi'}</Text>
+        <Stack isInline spacing={2}>
+          {<Tag size="sm">{is_active ? 'Aktif' : 'Pasif'}</Tag>}
+          {is_complete && <Tag size="sm">Tamamlandi</Tag>}
+          {<Tag size="sm">{is_private ? 'Ozel' : 'Genel'}</Tag>}
+        </Stack>
       </Box>
-      <Stack isInline spacing={2}>
-        {<Tag size="sm">{is_active ? 'Aktif' : 'Pasif'}</Tag>}
-        {is_complete && <Tag size="sm">Tamamlandi</Tag>}
-        {<Tag size="sm">{is_private ? 'Ozel' : 'Genel'}</Tag>}
-      </Stack>
-      <Flex flexWrap="wrap" mt={4} mx={-2}>
+      <Flex flexWrap="wrap" mx={-2} my={2}>
         <Box w={['full', null, 1 / 2]} p={2}>
           <GroupUsersList users={users} />
         </Box>

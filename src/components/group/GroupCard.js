@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
 import moment from 'moment'
 import 'moment/locale/tr'
-import { Heading, Text, Tag, Stack, TagLabel } from '@chakra-ui/core'
+import { FaBook, FaUserFriends } from 'react-icons/all'
+import { Heading, Text, Tag, Stack, TagLabel, TagIcon } from '@chakra-ui/core'
 import { groupType } from '../../types/groupTypes'
 import { AuthContext } from '../../App'
 
@@ -28,11 +29,25 @@ const GroupCard = ({ group }) => {
       <Text>{moment(start_date).fromNow()} kuruldu.</Text>
       {end_date && <Text>{moment(end_date).fromNow()} tamamlanacak.</Text>}
       <Stack isInline spacing={2}>
-        <Tag size="sm">{fields.length} Kategori</Tag>
-        <Tag size="sm">{users.length} Kullanici</Tag>
-        {<Tag size="sm">{is_active ? 'Aktif' : 'Pasif'}</Tag>}
+        <Tag variant="outline" size="sm">
+          <TagIcon icon={FaBook} />
+          <TagLabel>{fields.length}</TagLabel>
+        </Tag>
+        <Tag variant="outline" size="sm">
+          <TagIcon icon={FaUserFriends} />
+          <TagLabel>{users.length}</TagLabel>
+        </Tag>
+        {
+          <Tag variant="outline" size="sm">
+            {is_active ? 'Aktif' : 'Pasif'}
+          </Tag>
+        }
         {is_complete && <Tag size="sm">Tamamlandi</Tag>}
-        {<Tag size="sm">{is_private ? 'Ozel' : 'Genel'}</Tag>}
+        {
+          <Tag variant="outline" size="sm">
+            {is_private ? 'Ozel' : 'Genel'}
+          </Tag>
+        }
       </Stack>
     </Stack>
   )

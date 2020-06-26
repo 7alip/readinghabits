@@ -1,10 +1,12 @@
 import React, { useContext } from 'react'
 import { useQuery, useMutation } from '@apollo/client'
-import { Box, Spinner, Alert, Stack, Heading, Tag, Text, Button } from '@chakra-ui/core'
-import { Link, useParams } from 'react-router-dom'
-import { GET_GROUP_BY_ID } from '../../apollo/groupQueries'
+import { Box, Spinner, Alert, Stack, Heading, Tag, Text, Button, IconButton, Flex } from '@chakra-ui/core'
+import { useParams, useHistory } from 'react-router-dom'
+import { GET_GROUP_BY_ID, GET_GROUPS } from '../../apollo/groupQueries'
 import { JOIN_GROUP, LEAVE_GROUP } from '../../apollo/groupMutations'
 import { AuthContext } from '../../App'
+import GroupUsersList from '../../components/group/GroupUsersList'
+import GroupCategoryTable from '../../components/group/GroupCategoryTable'
 
 const SingleGroup = () => {
   let { id } = useParams()
@@ -14,8 +16,20 @@ const SingleGroup = () => {
     variables: { id },
   })
 
-  const [joingGroup] = useMutation(JOIN_GROUP, { refetchQueries: [{ query: GET_GROUP_BY_ID, variables: { id } }] })
-  const [leaveGroup] = useMutation(LEAVE_GROUP, { refetchQueries: [{ query: GET_GROUP_BY_ID, variables: { id } }] })
+  const [joingGroup] = useMutation(JOIN_GROUP, {
+    refetchQueries: [
+      { query: GET_GROUP_BY_ID, variables: { id } },
+      { query: GET_GROUPS, variables: { id: userId } },
+    ],
+  })
+  const [leaveGroup] = useMutation(LEAVE_GROUP, {
+    refetchQueries: [
+      { query: GET_GROUP_BY_ID, variables: { id } },
+      { query: GET_GROUPS, variables: { id: userId } },
+    ],
+  })
+
+  const history = useHistory()
 
   if (loading) return <Spinner />
   if (error) return <Alert status="error">Error</Alert>
@@ -29,19 +43,24 @@ const SingleGroup = () => {
 
   return (
     <Box mt={4}>
-      <Button as={Link} to="/groups" mr={4}>
-        Tüm Gruplar
-      </Button>
-      <Button as={Link} to="/groups/me">
-        Benim Gruplarim
-      </Button>
-      <Heading my={5}>{title}</Heading>
-      {isJoined ? (
-        <Button isDisabled={isCreator} onClick={() => leaveGroup({ variables: { groupId: id, userId } })}>
+      <Heading my={5}>
+        <IconButton variant="ghost" icon="arrow-back" onClick={history.goBack} mr={4} />
+        {title}
+      </Heading>
+      {isJoined && !isCreator && (
+        <Button variantColor="red" onClick={() => leaveGroup({ variables: { groupId: id, userId } })}>
           Gruptan Ayril
         </Button>
-      ) : (
-        <Button onClick={() => joingGroup({ variables: { groupId: id, userId } })}>Gruba Katil</Button>
+      )}
+      {!isJoined && (
+        <Button variantColor="blue" onClick={() => joingGroup({ variables: { groupId: id, userId } })}>
+          Gruba Katil
+        </Button>
+      )}
+      {isCreator && (
+        <Button variantColor="green" leftIcon="edit">
+          Duzenle
+        </Button>
       )}
       <Box my={5}>
         <Text>Baslama Tarihi: {start_date}</Text>
@@ -52,24 +71,14 @@ const SingleGroup = () => {
         {is_complete && <Tag size="sm">Tamamlandi</Tag>}
         {<Tag size="sm">{is_private ? 'Ozel' : 'Genel'}</Tag>}
       </Stack>
-      <Stack isInline spacing={2}>
-        <Stack flex={1} p={3} boxShadow="sm">
-          <Heading size="md">Kullanicilar</Heading>
-          {users.map((user, i) => (
-            <Text key={i}>{user.user.username}</Text>
-          ))}
-        </Stack>
-        <Stack flex={1} p={3} boxShadow="sm">
-          <Heading size="md">Kategoriler</Heading>
-          {fields.map((field, i) => (
-            <Box key={i}>
-              <Text fontWeight="bold">{field.category.title}</Text>
-              <Text fontSize="sm">Minimum {field.min_value} sayfa</Text>
-              {field.point && <Tag size="sm">{field.point} puan</Tag>}
-            </Box>
-          ))}
-        </Stack>
-      </Stack>
+      <Flex flexWrap="wrap" mt={4} mx={-2}>
+        <Box w={['full', null, 1 / 2]} p={2}>
+          <GroupUsersList users={users} />
+        </Box>
+        <Box w={['full', null, 1 / 2]} p={2}>
+          <GroupCategoryTable categories={fields} />
+        </Box>
+      </Flex>
     </Box>
   )
 }

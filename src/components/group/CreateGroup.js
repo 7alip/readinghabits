@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/core'
 import { useMutation, useQuery } from '@apollo/client'
 import { CREATE_GROUP, ADD_GROUP_CATEGORY } from '../../apollo/groupMutations'
-import { GET_GROUP_CATEGORIES, GET_GROUPS } from '../../apollo/groupQueries'
+import { GET_CATEGORIES, GET_GROUPS } from '../../apollo/groupQueries'
 import DisplayCreatedGroupInfo from './DisplayCreatedGroupInfo'
 import DisplayAddedCategoriesInfo from './DisplayAddedCategoriesInfo'
 import AddCategoryForm from './AddCategoryForm'
@@ -42,7 +42,7 @@ const CreateGroup = ({ initialRef, isOpen, onClose, userId }) => {
 
   const { title, startDate, endDate, maxUser, isPrivate } = groupFormFields
 
-  const { loading: loadingGetCategory, error: errorGetCategory, data: dataGetCategory } = useQuery(GET_GROUP_CATEGORIES)
+  const { loading: loadingGetCategory, error: errorGetCategory, data: dataGetCategory } = useQuery(GET_CATEGORIES)
 
   const [onAddCategory, { loading: loadingAddCategory, error: errorAddCategory }] = useMutation(ADD_GROUP_CATEGORY, {
     onCompleted: () => onClose(),

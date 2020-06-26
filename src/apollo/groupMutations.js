@@ -55,3 +55,11 @@ export const LEAVE_GROUP = gql`
     }
   }
 `
+
+export const ADD_GROUP_READING = gql`
+  mutation($categoryId: Int!, $groupId: Int!, $userId: Int!, $value: Int!) {
+    insert_group_reading(objects: { category_id: $categoryId, group_id: $groupId, user_id: $userId, value: $value }) {
+      affected_rows
+    }
+  }
+`

@@ -59,11 +59,24 @@ export const GET_GROUP_BY_ID = gql`
   }
 `
 
-export const GET_GROUP_CATEGORIES = gql`
+export const GET_CATEGORIES = gql`
   query getGroupCategories {
     category {
       id
       title
+    }
+  }
+`
+export const GET_GROUP_CATEGORIES = gql`
+  query getGroupCategories($groupId: Int!) {
+    group_by_pk(id: $groupId) {
+      fields {
+        category {
+          id
+          title
+        }
+        min_value
+      }
     }
   }
 `

@@ -1,16 +1,31 @@
 import React, { useContext } from 'react'
 import { useQuery, useMutation } from '@apollo/client'
-import { Box, Spinner, Alert, Stack, Heading, Tag, Text, Button, IconButton, Flex } from '@chakra-ui/core'
+import {
+  Box,
+  Spinner,
+  Alert,
+  Stack,
+  Heading,
+  Tag,
+  Text,
+  Button,
+  IconButton,
+  Flex,
+  useDisclosure,
+} from '@chakra-ui/core'
 import { useParams, useHistory } from 'react-router-dom'
 import { GET_GROUP_BY_ID, GET_GROUPS } from '../../apollo/groupQueries'
 import { JOIN_GROUP, LEAVE_GROUP } from '../../apollo/groupMutations'
 import { AuthContext } from '../../App'
 import GroupUsersList from '../../components/group/GroupUsersList'
 import GroupCategoryTable from '../../components/group/GroupCategoryTable'
+import { FaBookOpen, FaUserMinus, FaUserPlus } from 'react-icons/fa'
+import AddGroupReading from '../../components/group/AddGroupReading'
 
 const SingleGroup = () => {
   let { id } = useParams()
   const { userId } = useContext(AuthContext)
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const { loading, error, data } = useQuery(GET_GROUP_BY_ID, {
     variables: { id },
@@ -47,18 +62,33 @@ const SingleGroup = () => {
         <IconButton variant="ghost" icon="arrow-back" onClick={history.goBack} mr={4} />
         {title}
       </Heading>
+      {(isJoined || isCreator) && (
+        <Button mr={2} leftIcon={FaBookOpen} variantColor="purple" onClick={onOpen}>
+          Okuma gir
+        </Button>
+      )}
       {isJoined && !isCreator && (
-        <Button variantColor="red" onClick={() => leaveGroup({ variables: { groupId: id, userId } })}>
+        <Button
+          mr={2}
+          leftIcon={FaUserMinus}
+          variantColor="red"
+          onClick={() => leaveGroup({ variables: { groupId: id, userId } })}
+        >
           Gruptan Ayril
         </Button>
       )}
       {!isJoined && (
-        <Button variantColor="blue" onClick={() => joingGroup({ variables: { groupId: id, userId } })}>
+        <Button
+          mr={2}
+          leftIcon={FaUserPlus}
+          variantColor="blue"
+          onClick={() => joingGroup({ variables: { groupId: id, userId } })}
+        >
           Gruba Katil
         </Button>
       )}
       {isCreator && (
-        <Button variantColor="green" leftIcon="edit">
+        <Button mr={2} variantColor="green" leftIcon="edit">
           Duzenle
         </Button>
       )}
@@ -79,6 +109,7 @@ const SingleGroup = () => {
           <GroupCategoryTable categories={fields} />
         </Box>
       </Flex>
+      <AddGroupReading isOpen={isOpen} onClose={onClose} groupId={id} />
     </Box>
   )
 }

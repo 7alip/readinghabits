@@ -57,8 +57,10 @@ export const LEAVE_GROUP = gql`
 `
 
 export const ADD_GROUP_READING = gql`
-  mutation($categoryId: Int!, $groupId: Int!, $userId: Int!, $value: Int!) {
-    insert_group_reading(objects: { category_id: $categoryId, group_id: $groupId, user_id: $userId, value: $value }) {
+  mutation($categoryId: Int!, $groupId: Int!, $userId: Int!, $value: Int!, $entryDate: date!) {
+    insert_group_reading(
+      objects: { category_id: $categoryId, group_id: $groupId, user_id: $userId, value: $value, entry_date: $entryDate }
+    ) {
       affected_rows
     }
   }

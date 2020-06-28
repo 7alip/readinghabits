@@ -46,10 +46,18 @@ export const GET_GROUP_BY_ID = gql`
         user {
           id
           username
+          group_readings(where: { group_id: { _eq: $id } }) {
+            category {
+              title
+            }
+            value
+            entry_date
+          }
         }
       }
       fields {
         category {
+          id
           title
         }
         min_value

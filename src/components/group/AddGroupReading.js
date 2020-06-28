@@ -61,7 +61,7 @@ const AddGroupReading = ({ isOpen, onClose, groupId }) => {
 
   const onAddReading = () => {
     readings.forEach(reading =>
-      onAddData({ variables: { groupId, userId, value: reading.value, categoryId: reading.category.id } }),
+      onAddData({ variables: { groupId, userId, value: reading.value, categoryId: reading.category.id, entryDate } }),
     )
   }
 

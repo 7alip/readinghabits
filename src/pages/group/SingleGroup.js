@@ -109,7 +109,7 @@ const SingleGroup = () => {
           <GroupCategoryTable categories={fields} />
         </Box>
       </Flex>
-      <AddGroupReading isOpen={isOpen} onClose={onClose} groupId={id} />
+      <AddGroupReading isOpen={isOpen} onClose={onClose} groupId={Number(id)} />
     </Box>
   )
 }

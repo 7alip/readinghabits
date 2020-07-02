@@ -5,30 +5,30 @@ import {
   AiOutlineUser,
   AiOutlineUsergroupAdd,
   AiOutlineHome,
-  AiOutlineSetting,
+  AiOutlineLock,
 } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
 
 const barItems = [
   {
     text: 'Anasayfa',
-    link: '/home',
+    link: '/giris',
     icon: <AiOutlineHome />,
   },
   {
     text: 'Profil',
-    link: '/profile',
+    link: '/profil',
     icon: <AiOutlineUser />,
   },
   {
     text: 'Grup',
-    link: '/group',
+    link: '/gruplar',
     icon: <AiOutlineUsergroupAdd />,
   },
   {
-    text: 'Ayarlar',
-    link: '/settings',
-    icon: <AiOutlineSetting />,
+    text: 'Hesap',
+    link: '/hesap',
+    icon: <AiOutlineLock />,
   },
 ]
 

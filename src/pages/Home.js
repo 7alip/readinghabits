@@ -1,8 +1,8 @@
 import React from 'react'
-import Layout from '../components/layout/Layout'
+import { Heading } from '@chakra-ui/core'
 
 const Home = () => {
-  return <Layout>Hoşgeldiniz</Layout>
+  return <Heading>Hoşgeldiniz</Heading>
 }
 
 export default Home

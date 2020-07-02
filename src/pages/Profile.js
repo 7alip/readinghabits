@@ -1,8 +1,8 @@
 import React from 'react'
-import Layout from '../components/layout/Layout'
+import { Box } from '@chakra-ui/core'
 
 const Profile = () => {
-  return <Layout>Profile Page</Layout>
+  return <Box>Profile Page</Box>
 }
 
 export default Profile

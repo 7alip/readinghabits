@@ -1,12 +1,12 @@
 import React from 'react'
 
 import { useParams } from 'react-router-dom'
-import Layout from '../components/layout/Layout'
+import { Box } from '@chakra-ui/core'
 
 const Group = () => {
   const { id } = useParams()
 
-  return <Layout basic>Group id = {id}</Layout>
+  return <Box>Group id = {id}</Box>
 }
 
 export default Group

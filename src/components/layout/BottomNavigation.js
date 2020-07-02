@@ -1,34 +1,36 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Flex, Text, PseudoBox } from '@chakra-ui/core'
 import { NavLink } from 'react-router-dom'
 import {
   AiOutlineHome,
   AiOutlineUser,
   AiOutlineUsergroupAdd,
-  AiOutlineSetting,
+  AiOutlineLock,
 } from 'react-icons/ai'
 import styled from '@emotion/styled'
+import { AuthContext } from '../../context/auth-context'
 
 const barItems = [
   {
     text: 'Anasayfa',
-    link: '/home',
+    link: '/giris',
     icon: <AiOutlineHome />,
   },
   {
     text: 'Profil',
-    link: '/profile',
+    link: '/profil',
     icon: <AiOutlineUser />,
+    isPrivate: true,
   },
   {
-    text: 'Grup',
-    link: '/group',
+    text: 'Gruplar',
+    link: '/gruplar',
     icon: <AiOutlineUsergroupAdd />,
   },
   {
-    text: 'Ayarlar',
-    link: '/settings',
-    icon: <AiOutlineSetting />,
+    text: 'Hesap',
+    link: '/hesap',
+    icon: <AiOutlineLock />,
   },
 ]
 
@@ -39,35 +41,42 @@ const StyledNavLink = styled(Flex)`
 `
 
 const BottomNavigation = () => {
+  const { isLoggedIn } = useContext(AuthContext)
+
   return (
     <Flex position="sticky" bottom="0" w="full" bg="white" h="64px">
-      {barItems.map(item => (
-        <PseudoBox
-          key={item.link}
-          flex="1"
-          borderTopWidth="2px"
-          borderTopColor="gray.100"
-        >
-          <StyledNavLink
-            py={2}
-            activeClassName="active"
-            exact={item.link === '/'}
-            flexDir="column"
-            textAlign="center"
-            align="center"
-            justify="center"
-            h="full"
-            as={NavLink}
-            to={item.link}
-            activeStyle={{ color: 'red' }}
-          >
-            <Text fontSize="1.5em">{item.icon}</Text>
-            <Text fontWeight="bold" display={['none', 'block']}>
-              {item.text}
-            </Text>
-          </StyledNavLink>
-        </PseudoBox>
-      ))}
+      {barItems.map(
+        item =>
+          (isLoggedIn || (!isLoggedIn && !item.isPrivate)) && (
+            <PseudoBox
+              key={item.link}
+              flex="1"
+              borderTopWidth="2px"
+              borderTopColor="gray.100"
+            >
+              <StyledNavLink
+                py={2}
+                borderTopWidth="2px"
+                borderTopColor="transparent"
+                activeClassName="active"
+                exact={item.link === '/'}
+                flexDir="column"
+                textAlign="center"
+                align="center"
+                justify="center"
+                h="full"
+                as={NavLink}
+                to={item.link}
+                activeStyle={{ color: 'red' }}
+              >
+                <Text fontSize="1.5em">{item.icon}</Text>
+                <Text fontWeight={['500', '700']} fontSize={['xs', 'sm', 'md']}>
+                  {item.text}
+                </Text>
+              </StyledNavLink>
+            </PseudoBox>
+          ),
+      )}
     </Flex>
   )
 }

@@ -1,9 +1,9 @@
 import React from 'react'
 
-import Layout from '../components/layout/Layout'
+import { Box } from '@chakra-ui/core'
 
 const Groups = () => {
-  return <Layout>Groups</Layout>
+  return <Box>Groups</Box>
 }
 
 export default Groups

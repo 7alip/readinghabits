@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react'
-import { Stack, Button, Box, Text } from '@chakra-ui/core'
+import { Stack, Button, Text } from '@chakra-ui/core'
 
 import { AuthContext } from '../context/auth-context'
 import Login from '../components/auth/Login'
 import Signup from '../components/auth/Signup'
+import Div from '../components/layout/Div'
 
 const Auth = () => {
   const [isLoginMode, setIsLoginMode] = useState(true)
@@ -14,7 +15,7 @@ const Auth = () => {
       {isLoggedIn ? (
         <Button onClick={logout}>Çıkış Yap</Button>
       ) : (
-        <Box p={5} boxShadow="sm">
+        <Div p={5} boxShadow="sm">
           {isLoginMode ? <Login /> : <Signup />}
           {isLoginMode ? (
             <Text>
@@ -31,7 +32,7 @@ const Auth = () => {
               </Button>
             </Text>
           )}
-        </Box>
+        </Div>
       )}
     </Stack>
   )

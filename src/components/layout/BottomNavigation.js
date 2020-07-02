@@ -9,6 +9,7 @@ import {
 } from 'react-icons/ai'
 import styled from '@emotion/styled'
 import { AuthContext } from '../../context/auth-context'
+import Div from './Div'
 
 const barItems = [
   {
@@ -44,16 +45,11 @@ const BottomNavigation = () => {
   const { isLoggedIn } = useContext(AuthContext)
 
   return (
-    <Flex position="sticky" bottom="0" w="full" bg="white" h="64px">
+    <Div as={Flex} position="sticky" bottom="0" w="full" h="64px">
       {barItems.map(
         item =>
           (isLoggedIn || (!isLoggedIn && !item.isPrivate)) && (
-            <PseudoBox
-              key={item.link}
-              flex="1"
-              borderTopWidth="2px"
-              borderTopColor="gray.100"
-            >
+            <PseudoBox key={item.link} flex="1">
               <StyledNavLink
                 py={2}
                 borderTopWidth="2px"
@@ -77,7 +73,7 @@ const BottomNavigation = () => {
             </PseudoBox>
           ),
       )}
-    </Flex>
+    </Div>
   )
 }
 

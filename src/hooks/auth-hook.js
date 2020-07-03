@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 
 let logoutTimer
+let resetLogoutTimer
 
 export const useAuth = () => {
   const [token, setToken] = useState()
+  const [resetToken, setResetToken] = useState()
   const [tokenExpirationState, setTokenExpirationState] = useState()
+  const [resetTokenExpirationState, setResetTokenExpirationState] = useState()
   const [userId, setUserId] = useState()
 
   const login = useCallback((uid, token, expirationDate) => {
@@ -26,11 +29,37 @@ export const useAuth = () => {
     )
   }, [])
 
+  const forgot = useCallback((uid, resetToken, resetExpirationDate) => {
+    setResetToken(resetToken)
+    setUserId(uid)
+
+    const resetTokenExpirationDate =
+      resetExpirationDate || new Date(new Date().getTime() + 1000 * 60 * 5)
+
+    setResetTokenExpirationState(resetTokenExpirationDate)
+
+    localStorage.setItem(
+      'resetData',
+      JSON.stringify({
+        userId: uid,
+        resetToken,
+        expiration: resetTokenExpirationDate,
+      }),
+    )
+  }, [])
+
+  const clearResetToken = useCallback(() => {
+    setResetToken(null)
+    setResetTokenExpirationState(null)
+    setUserId(null)
+  }, [])
+
   const logout = useCallback(() => {
     setToken(null)
     setTokenExpirationState(null)
     setUserId(null)
     localStorage.removeItem('userData')
+    clearResetToken()
   }, [])
 
   useEffect(() => {
@@ -38,10 +67,22 @@ export const useAuth = () => {
       const remainingTime =
         new Date(tokenExpirationState).getTime() - new Date().getTime()
       logoutTimer = setTimeout(logout, remainingTime)
+    } else if (resetToken && resetTokenExpirationState) {
+      const resetRemainingTime =
+        new Date(resetTokenExpirationState).getTime() - new Date().getTime()
+      resetLogoutTimer = setTimeout(clearResetToken, resetRemainingTime)
     } else {
       clearTimeout(logoutTimer)
+      clearTimeout(resetLogoutTimer)
     }
-  }, [token, logout, tokenExpirationState])
+  }, [
+    token,
+    logout,
+    tokenExpirationState,
+    resetToken,
+    resetTokenExpirationState,
+    clearResetToken,
+  ])
 
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem('userData'))
@@ -54,5 +95,5 @@ export const useAuth = () => {
     }
   }, [login])
 
-  return { token, login, logout, userId }
+  return { token, login, logout, userId, forgot }
 }

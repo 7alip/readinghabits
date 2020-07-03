@@ -9,10 +9,11 @@ const httpLink = createHttpLink({
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
   const userData = JSON.parse(localStorage.getItem('userData')) || {}
+  const resetData = JSON.parse(localStorage.getItem('resetData')) || {}
   let _headers = { ...headers }
 
-  if (userData.token) {
-    _headers.authorization = `Bearer ${userData.token}`
+  if (userData.token || resetData.token) {
+    _headers.authorization = `Bearer ${userData.token || resetData.resetToken}`
   }
 
   return _headers

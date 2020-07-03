@@ -9,9 +9,16 @@ import theme from './context/theme'
 import Routes from './routes/Routes'
 
 function App() {
-  const { login, logout, token, userId } = useAuth()
+  const { login, logout, token, userId, forgot } = useAuth()
 
-  const context = { isLoggedIn: !!token, userId, token, login, logout }
+  const context = {
+    isLoggedIn: !!token,
+    userId,
+    token,
+    login,
+    logout,
+    forgot,
+  }
 
   return (
     <React.StrictMode>

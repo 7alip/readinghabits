@@ -9,7 +9,15 @@ import theme from './context/theme'
 import Routes from './routes/Routes'
 
 function App() {
-  const { login, logout, token, userId, forgot } = useAuth()
+  const {
+    login,
+    logout,
+    token,
+    userId,
+    forgot,
+    clearResetToken,
+    resetToken,
+  } = useAuth()
 
   const context = {
     isLoggedIn: !!token,
@@ -18,6 +26,8 @@ function App() {
     login,
     logout,
     forgot,
+    clearResetToken,
+    resetToken,
   }
 
   return (

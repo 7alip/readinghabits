@@ -52,6 +52,7 @@ export const useAuth = () => {
     setResetToken(null)
     setResetTokenExpirationState(null)
     setUserId(null)
+    localStorage.removeItem('resetData')
   }, [])
 
   const logout = useCallback(() => {
@@ -95,5 +96,5 @@ export const useAuth = () => {
     }
   }, [login])
 
-  return { token, login, logout, userId, forgot }
+  return { token, login, logout, userId, forgot, clearResetToken, resetToken }
 }

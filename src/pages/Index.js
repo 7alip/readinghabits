@@ -1,6 +1,5 @@
 import React from 'react'
-import Layout from '../components/layout/Layout'
-import { SimpleGrid, Stack, Text } from '@chakra-ui/core'
+import { SimpleGrid, Stack, Text, Box } from '@chakra-ui/core'
 import {
   AiOutlineUser,
   AiOutlineUsergroupAdd,
@@ -8,6 +7,7 @@ import {
   AiOutlineLock,
 } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
+import Div from '../components/layout/Div'
 
 const barItems = [
   {
@@ -34,28 +34,24 @@ const barItems = [
 
 const Index = () => {
   return (
-    <Layout basic>
-      <SimpleGrid gridGap={3} columns={2} h="full" py={3}>
-        {barItems.map(item => (
-          <Stack
-            key={item.link}
-            as={Link}
-            to={item.link}
+    <SimpleGrid gridGap={3} columns={2} h="full" py={3}>
+      {barItems.map(item => (
+        <Box as={Link} key={item.link} to={item.link}>
+          <Div
+            as={Stack}
             w="full"
             h="full"
-            justify="center"
-            align="center"
+            justifyContent="center"
+            alignItems="center"
             fontSize="2em"
-            borderWidth="2px"
-            borderColor="gray.500"
-            color="gray.500"
+            boxShadow="sm"
           >
             <Text fontSize="2em">{item.icon}</Text>
             <Text fontWeight="bold">{item.text}</Text>
-          </Stack>
-        ))}
-      </SimpleGrid>
-    </Layout>
+          </Div>
+        </Box>
+      ))}
+    </SimpleGrid>
   )
 }
 

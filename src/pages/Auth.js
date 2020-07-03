@@ -21,7 +21,7 @@ const Auth = () => {
       case 'forgot':
         return <ForgotPassword setMode={setMode} />
       case 'reset':
-        return <ResetPassword />
+        return <ResetPassword setMode={setMode} />
       default:
         return <Login />
     }

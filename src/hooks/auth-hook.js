@@ -60,7 +60,7 @@ export const useAuth = () => {
     setUserId(null)
     localStorage.removeItem('userData')
     clearResetToken()
-  }, [])
+  }, [clearResetToken])
 
   useEffect(() => {
     if (token && tokenExpirationState) {

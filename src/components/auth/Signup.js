@@ -1,12 +1,38 @@
 import React, { useState, useContext } from 'react'
-import { gql, useMutation } from '@apollo/client'
-import { Box, Input, Button, Stack, Heading, useToast } from '@chakra-ui/core'
+import { gql, useMutation, useQuery } from '@apollo/client'
+import {
+  Box,
+  Input,
+  Button,
+  Stack,
+  Heading,
+  useToast,
+  Select,
+} from '@chakra-ui/core'
 import { AuthContext } from '../../context/auth-context'
 import { useHistory, useLocation } from 'react-router-dom'
 
+const GET_QUESTIONS = gql`
+  query getQuestions {
+    security_question {
+      question
+    }
+  }
+`
+
 const SIGNUP = gql`
-  mutation signup($username: String!, $password: String!) {
-    signup(username: $username, password: $password) {
+  mutation signup(
+    $username: String!
+    $password: String!
+    $question: String!
+    $answer: String!
+  ) {
+    signup(
+      username: $username
+      password: $password
+      question: $question
+      answer: $answer
+    ) {
       id
       token
     }
@@ -17,6 +43,8 @@ const initialState = {
   username: '',
   password: '',
   repassword: '',
+  question: '',
+  answer: '',
 }
 
 const Signup = () => {
@@ -30,8 +58,15 @@ const Signup = () => {
 
   let { from } = location.state || { from: { pathname: '/' } }
 
+  const { data } = useQuery(GET_QUESTIONS)
+
   const [onSignup, { loading }] = useMutation(SIGNUP, {
-    variables: { username: state.username, password: state.password },
+    variables: {
+      username: state.username,
+      password: state.password,
+      question: state.question,
+      answer: state.answer,
+    },
     onCompleted: data => {
       login(data.signup.id, data.signup.token)
       history.replace(from)
@@ -81,6 +116,26 @@ const Signup = () => {
           placeholder="Şifre tekrari"
           type="password"
           value={state.repassword}
+          onChange={handleChange}
+          isRequired
+        />
+        <Select
+          name="question"
+          value={state.question}
+          placeholder="Güvenlik Sorusu"
+          onChange={handleChange}
+        >
+          {data &&
+            data.security_question.map(({ question }) => (
+              <option key={question} value={question}>
+                {question}
+              </option>
+            ))}
+        </Select>
+        <Input
+          name="answer"
+          placeholder="Cevap"
+          value={state.answer}
           onChange={handleChange}
           isRequired
         />

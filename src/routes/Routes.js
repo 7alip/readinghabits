@@ -11,6 +11,7 @@ const ProfilePage = lazy(() => import('../pages/Profile'))
 const GroupPage = lazy(() => import('../pages/Group'))
 const GroupsPage = lazy(() => import('../pages/Groups'))
 const NotFoundPage = lazy(() => import('../pages/404'))
+const LibraryPage = lazy(() => import('../pages/Library'))
 const AuthPage = lazy(() => import('../pages/Auth'))
 
 const routes = [
@@ -37,6 +38,10 @@ const routes = [
     path: '/gruplar/:grupId',
     component: GroupPage,
     isPrivate: true,
+  },
+  {
+    path: '/kutuphane',
+    component: LibraryPage,
   },
   {
     path: '/hesap',

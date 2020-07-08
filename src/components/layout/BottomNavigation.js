@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Flex, Text, PseudoBox } from '@chakra-ui/core'
+import { Flex, Text, PseudoBox, Box } from '@chakra-ui/core'
 import { NavLink } from 'react-router-dom'
 import { AiFillHome, AiFillBook } from 'react-icons/ai'
 import { BsPeopleFill, BsPersonFill } from 'react-icons/bs'
@@ -60,7 +60,7 @@ const BottomNavigation = () => {
                 to={item.link}
                 activeStyle={{ color: 'red' }}
               >
-                <Text fontSize="1.5em">{item.icon}</Text>
+                <Box fontSize="1.5em">{item.icon}</Box>
                 <Text fontWeight={['500', '700']} fontSize={['xs', 'sm', 'md']}>
                   {item.text}
                 </Text>

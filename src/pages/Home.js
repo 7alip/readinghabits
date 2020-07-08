@@ -1,8 +1,21 @@
 import React from 'react'
-import { Heading } from '@chakra-ui/core'
+import { Heading, Box } from '@chakra-ui/core'
+import SectionHeader from '../components/shared/SectionHeader'
+import { AiFillBook } from 'react-icons/ai'
 
 const Home = () => {
-  return <Heading>Hoşgeldiniz</Heading>
+  return (
+    <Box>
+      <Heading>Hoşgeldiniz</Heading>
+      <SectionHeader
+        icon="moon"
+        title="Başlık"
+        buttonText="Görüntüle"
+        buttonIcon={AiFillBook}
+        navigate="/"
+      />
+    </Box>
+  )
 }
 
 export default Home

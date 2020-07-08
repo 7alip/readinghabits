@@ -1,14 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Flex, Box, useColorMode, IconButton } from '@chakra-ui/core'
+import { Flex, Box, useColorMode } from '@chakra-ui/core'
 import { useRouteMatch } from 'react-router-dom'
 
 import BottomNavigation from './BottomNavigation'
+import ToggleTheme from './ToggleTheme'
 
 const Layout = ({ children }) => {
   const isGropPage = useRouteMatch('/gruplar/:grupId')
 
-  const { colorMode, toggleColorMode } = useColorMode()
+  const { colorMode } = useColorMode()
 
   return (
     <Flex
@@ -18,15 +19,7 @@ const Layout = ({ children }) => {
       h="100vh"
       overflow="hidden"
     >
-      <IconButton
-        position="fixed"
-        top={2}
-        right={2}
-        isRound
-        variant="outline"
-        icon={colorMode === 'dark' ? 'sun' : 'moon'}
-        onClick={toggleColorMode}
-      />
+      <ToggleTheme />
       <Box px={[2, 3, 4]} flex={1} overflowY="auto">
         {children}
       </Box>

@@ -7,10 +7,11 @@ import Signup from '../components/auth/Signup'
 import Base from '../components/shared/Base'
 import ForgotPassword from '../components/auth/ForgotPassword'
 import ResetPassword from '../components/auth/ResetPassword'
+import { Redirect } from 'react-router-dom'
 
 const Auth = () => {
   const [mode, setMode] = useState('login')
-  const { isLoggedIn, logout } = useContext(AuthContext)
+  const { isLoggedIn } = useContext(AuthContext)
 
   const Forms = () => {
     switch (mode) {
@@ -82,7 +83,7 @@ const Auth = () => {
   return (
     <Stack h="full" justify="center" align="center">
       {isLoggedIn ? (
-        <Button onClick={logout}>Çıkış Yap</Button>
+        <Redirect to="/profil" />
       ) : (
         <Base p={5} boxShadow="sm">
           <Forms />

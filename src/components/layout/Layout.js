@@ -20,7 +20,7 @@ const Layout = ({ children }) => {
       overflow="hidden"
     >
       <ToggleTheme />
-      <Box px={[2, 3, 4]} flex={1} overflowY="auto">
+      <Box px={[2, 3, 4]} flex={1} overflowY="auto" overflowX="hidden">
         {children}
       </Box>
       {!isGropPage && <BottomNavigation />}

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useColorMode, PseudoBox } from '@chakra-ui/core'
 
-const Div = ({ children, ...rest }) => {
+const Base = ({ children, ...rest }) => {
   const { colorMode } = useColorMode()
 
   return (
@@ -12,8 +12,8 @@ const Div = ({ children, ...rest }) => {
   )
 }
 
-Div.propTypes = {
+Base.propTypes = {
   children: PropTypes.node.isRequired,
 }
 
-export default Div
+export default Base

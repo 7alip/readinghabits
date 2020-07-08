@@ -7,7 +7,7 @@ import {
   AiOutlineLock,
 } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
-import Div from '../components/layout/Div'
+import Base from '../components/shared/Base'
 
 const barItems = [
   {
@@ -37,7 +37,7 @@ const Index = () => {
     <SimpleGrid gridGap={3} columns={2} h="full" py={3}>
       {barItems.map(item => (
         <Box as={Link} key={item.link} to={item.link}>
-          <Div
+          <Base
             as={Stack}
             w="full"
             h="full"
@@ -48,7 +48,7 @@ const Index = () => {
           >
             <Text fontSize="2em">{item.icon}</Text>
             <Text fontWeight="bold">{item.text}</Text>
-          </Div>
+          </Base>
         </Box>
       ))}
     </SimpleGrid>

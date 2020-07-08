@@ -4,7 +4,7 @@ import { Stack, Button, Text } from '@chakra-ui/core'
 import { AuthContext } from '../context/auth-context'
 import Login from '../components/auth/Login'
 import Signup from '../components/auth/Signup'
-import Div from '../components/layout/Div'
+import Base from '../components/shared/Base'
 import ForgotPassword from '../components/auth/ForgotPassword'
 import ResetPassword from '../components/auth/ResetPassword'
 
@@ -84,10 +84,10 @@ const Auth = () => {
       {isLoggedIn ? (
         <Button onClick={logout}>Çıkış Yap</Button>
       ) : (
-        <Div p={5} boxShadow="sm">
+        <Base p={5} boxShadow="sm">
           <Forms />
           <Links />
-        </Div>
+        </Base>
       )}
     </Stack>
   )

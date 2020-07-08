@@ -92,7 +92,16 @@ const ForgotPassword = ({ setMode }) => {
           onChange={handleChange}
           isRequired
         />
-        <Button variantColor="blue" isLoading={loading} type="submit">
+        <Button
+          isDisabled={
+            state.username === '' ||
+            state.question === '' ||
+            state.answer === ''
+          }
+          variantColor="blue"
+          isLoading={loading}
+          type="submit"
+        >
           Gönder
         </Button>
       </Stack>

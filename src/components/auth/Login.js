@@ -67,7 +67,12 @@ const Login = () => {
           onChange={handleChange}
           isRequired
         />
-        <Button variantColor="blue" isLoading={loading} type="submit">
+        <Button
+          isDisabled={state.username === '' || state.password === ''}
+          variantColor="blue"
+          isLoading={loading}
+          type="submit"
+        >
           Giriş Yap
         </Button>
       </Stack>

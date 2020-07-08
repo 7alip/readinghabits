@@ -9,7 +9,7 @@ import {
 } from 'react-icons/ai'
 import styled from '@emotion/styled'
 import { AuthContext } from '../../context/auth-context'
-import Div from './Div'
+import Base from '../shared/Base'
 
 const barItems = [
   {
@@ -45,7 +45,7 @@ const BottomNavigation = () => {
   const { isLoggedIn } = useContext(AuthContext)
 
   return (
-    <Div as={Flex} position="sticky" bottom="0" w="full" h="64px">
+    <Base as={Flex} position="sticky" bottom="0" w="full" h="64px">
       {barItems.map(
         item =>
           (isLoggedIn || (!isLoggedIn && !item.isPrivate)) && (
@@ -73,7 +73,7 @@ const BottomNavigation = () => {
             </PseudoBox>
           ),
       )}
-    </Div>
+    </Base>
   )
 }
 

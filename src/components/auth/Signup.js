@@ -141,7 +141,10 @@ const Signup = () => {
         />
         <Button
           isDisabled={
-            state.password === '' || state.password !== state.repassword
+            state.password === '' ||
+            state.password !== state.repassword ||
+            state.question === '' ||
+            state.answer === ''
           }
           variantColor="blue"
           isLoading={loading}

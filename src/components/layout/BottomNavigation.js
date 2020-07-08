@@ -1,12 +1,8 @@
 import React, { useContext } from 'react'
 import { Flex, Text, PseudoBox } from '@chakra-ui/core'
 import { NavLink } from 'react-router-dom'
-import {
-  AiOutlineHome,
-  AiOutlineUser,
-  AiOutlineUsergroupAdd,
-  AiOutlineLock,
-} from 'react-icons/ai'
+import { AiFillHome, AiFillBook } from 'react-icons/ai'
+import { BsPeopleFill, BsPersonFill } from 'react-icons/bs'
 import styled from '@emotion/styled'
 import { AuthContext } from '../../context/auth-context'
 import Base from '../shared/Base'
@@ -15,23 +11,22 @@ const barItems = [
   {
     text: 'Anasayfa',
     link: '/giris',
-    icon: <AiOutlineHome />,
+    icon: <AiFillHome />,
   },
   {
     text: 'Profil',
     link: '/profil',
-    icon: <AiOutlineUser />,
-    isPrivate: true,
+    icon: <BsPersonFill />,
   },
   {
     text: 'Gruplar',
     link: '/gruplar',
-    icon: <AiOutlineUsergroupAdd />,
+    icon: <BsPeopleFill />,
   },
   {
-    text: 'Hesap',
-    link: '/hesap',
-    icon: <AiOutlineLock />,
+    text: 'Kütüphane',
+    link: '/kutuphane',
+    icon: <AiFillBook />,
   },
 ]
 

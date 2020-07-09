@@ -12,7 +12,7 @@ const Home = () => {
         title="Başlık"
         buttonText="Görüntüle"
         buttonIcon={AiFillBook}
-        navigate="/"
+        to="/"
       />
     </Box>
   )

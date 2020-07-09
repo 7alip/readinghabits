@@ -32,7 +32,7 @@ const barItems = [
 
 const StyledNavLink = styled(Flex)`
   &.active {
-    border-top: 2px solid gray;
+    border-top: ${({ theme }) => `2px solid ${theme.colors.teal[400]}`};
   }
 `
 

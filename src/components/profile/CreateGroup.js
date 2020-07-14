@@ -3,8 +3,6 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import {
-  Modal,
-  ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalCloseButton,
@@ -12,15 +10,11 @@ import {
   ModalFooter,
   Button,
   Stack,
-  Switch,
-  Select,
-  Flex,
-  Box,
-  Text,
 } from '@chakra-ui/core'
-import { Formik, FieldArray } from 'formik'
+import { Formik } from 'formik'
 import * as Yup from 'yup'
-import FormField from '../form/FormField'
+import CreateGroupForm from './CreateGroupForm'
+import AddGroupFieldForm from './AddGroupFieldForm'
 
 const GroupSchema = Yup.object().shape({
   title: Yup.string()
@@ -39,7 +33,7 @@ const GroupSchema = Yup.object().shape({
 
 const today = new Date().toISOString().slice(0, 10)
 
-const CreateGroup = ({ isOpen, onClose }) => {
+const CreateGroup = ({ onClose }) => {
   const [isNextStep, setIsNextStep] = useState(false)
 
   const category = [
@@ -113,169 +107,62 @@ const CreateGroup = ({ isOpen, onClose }) => {
     >
       {props => {
         return (
-          <Modal
-            scrollBehavior="inside"
-            isCentered
-            isOpen={isOpen}
-            onClose={onClose}
+          <ModalContent
+            mx={[2, null, 0]}
+            as="form"
+            onSubmit={props.handleSubmit}
           >
-            <ModalOverlay />
-            <ModalContent
-              mx={[2, null, 0]}
-              as="form"
-              onSubmit={props.handleSubmit}
-            >
-              <ModalHeader>Grup Oluştur</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                {!isNextStep && (
-                  <Stack spacing={3}>
-                    <FormField
-                      {...props}
-                      isRequired
-                      label="Title"
-                      name="title"
-                      placeholder="Title"
-                    />
+            <ModalHeader>Grup Oluştur</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <CreateGroupForm isVisible={!isNextStep} {...props} />
+              <AddGroupFieldForm isVisible={isNextStep} {...props} />
+            </ModalBody>
 
-                    <FormField
-                      {...props}
-                      isRequired
-                      label="Baslangic Tarihi"
-                      name="startDate"
-                      type="date"
-                    />
-
-                    <FormField
-                      {...props}
-                      label="Bitiş Tarihi"
-                      name="endDate"
-                      type="date"
-                    />
-
-                    <Flex>
-                      <Box mr={3}>
-                        <FormField
-                          {...props}
-                          label="Maksimum katilimci"
-                          name="maxUser"
-                          type="number"
-                          placeholder="Maksimum katilimci"
-                        />
-                      </Box>
-                      <FormField
-                        {...props}
-                        as={Switch}
-                        size="lg"
-                        label="Özel grup"
-                        name="isPrivate"
-                      />
-                    </Flex>
-
-                    {props.values.isPrivate && (
-                      <FormField
-                        {...props}
-                        placeholder="Gün seçiniz"
-                        label="Analiz günü"
-                        name="day"
-                        as={Select}
-                      >
-                        <option value={1}>Pazartesi</option>
-                        <option value={2}>Sali</option>
-                        <option value={3}>Carsamba</option>
-                        <option value={4}>Persembe</option>
-                        <option value={5}>Cuma</option>
-                        <option value={6}>Cumartesi</option>
-                        <option value={0}>Pazar</option>
-                      </FormField>
-                    )}
-                  </Stack>
-                )}
-
-                {isNextStep && (
-                  <Stack spacing={3}>
-                    <Flex
-                      fontWeight="bold"
-                      borderBottom="1px"
-                      justify="space-between"
-                    >
-                      <Text>Kategori</Text>
-                      <Text>Haftalik hedef</Text>
-                    </Flex>
-                    <FieldArray
-                      name="categories"
-                      render={() =>
-                        props.values.categories.map((c, index) => (
-                          <Flex key={index} align="center" my={1}>
-                            <Text w={200}>{c.title}</Text>
-                            <FormField
-                              {...props}
-                              as={Switch}
-                              isDisabled={c.minValue !== ''}
-                              size="lg"
-                              name={`categories.${index}.isActive`}
-                            />
-                            <FormField
-                              isDisabled={!c.isActive}
-                              ml={3}
-                              {...props}
-                              type="number"
-                              name={`categories.${index}.minValue`}
-                              placeholder="Haftalik hedef"
-                            />
-                          </Flex>
-                        ))
-                      }
-                    />
-                  </Stack>
-                )}
-              </ModalBody>
-
-              <ModalFooter>
-                <Button
-                  mr={2}
-                  onClick={() => {
-                    props.resetForm()
-                    setIsNextStep(false)
-                    onClose()
-                  }}
-                >
-                  Vazgeç
-                </Button>
-                {isNextStep ? (
-                  <Stack isInline>
-                    <Button
-                      leftIcon="arrow-back"
-                      variantColor="blue"
-                      type="submit"
-                      onClick={() => setIsNextStep(false)}
-                    >
-                      Önceki
-                    </Button>
-                    <Button
-                      isDisabled={props.values.categories.every(
-                        c => c.minValue === '',
-                      )}
-                      variantColor="teal"
-                      type="submit"
-                    >
-                      Kaydet
-                    </Button>
-                  </Stack>
-                ) : (
+            <ModalFooter>
+              <Button
+                mr={2}
+                onClick={() => {
+                  props.resetForm()
+                  setIsNextStep(false)
+                  onClose()
+                }}
+              >
+                Vazgeç
+              </Button>
+              {isNextStep ? (
+                <Stack isInline>
                   <Button
-                    isDisabled={props.values.title === '' || !props.isValid}
+                    leftIcon="arrow-back"
                     variantColor="blue"
                     type="submit"
-                    rightIcon="arrow-forward"
-                    onClick={() => setIsNextStep(true)}
+                    onClick={() => setIsNextStep(false)}
                   >
-                    Kategori Ekle
+                    Önceki
                   </Button>
-                )}
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
+                  <Button
+                    isDisabled={props.values.categories.every(
+                      c => c.minValue === '',
+                    )}
+                    variantColor="teal"
+                    type="submit"
+                  >
+                    Kaydet
+                  </Button>
+                </Stack>
+              ) : (
+                <Button
+                  isDisabled={props.values.title === '' || !props.isValid}
+                  variantColor="blue"
+                  type="submit"
+                  rightIcon="arrow-forward"
+                  onClick={() => setIsNextStep(true)}
+                >
+                  Kategori Ekle
+                </Button>
+              )}
+            </ModalFooter>
+          </ModalContent>
         )
       }}
     </Formik>
@@ -283,7 +170,6 @@ const CreateGroup = ({ isOpen, onClose }) => {
 }
 
 CreateGroup.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
 }
 

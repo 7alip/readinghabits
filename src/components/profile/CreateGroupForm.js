@@ -1,55 +1,57 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import FormField from '../form/FormField'
-import { Flex, Box, Select, Switch, Stack } from '@chakra-ui/core'
+import { Select, Switch, Stack } from '@chakra-ui/core'
 
-const CreateGroupForm = ({ isVisible, ...props }) => {
+const CreateGroupForm = ({ isPrivate, errors, register }) => {
   return (
-    <Stack spacing={3} d={isVisible ? 'flex' : 'none'}>
+    <Stack spacing={3}>
       <FormField
-        {...props}
         isRequired
         label="Title"
         name="title"
         placeholder="Title"
+        errors={errors}
+        register={register}
       />
 
       <FormField
-        {...props}
         isRequired
         label="Baslangic Tarihi"
         name="startDate"
         type="date"
+        errors={errors}
+        register={register}
       />
 
-      <FormField {...props} label="Bitiş Tarihi" name="endDate" type="date" />
-
-      <Flex>
-        <Box mr={3}>
-          <FormField
-            {...props}
-            label="Maksimum katilimci"
-            name="maxUser"
-            type="number"
-            placeholder="Maksimum katilimci"
-          />
-        </Box>
+      <Stack spacing={3} isInline justify="space-between">
         <FormField
-          {...props}
+          label="Maksimum üye"
+          name="maxUser"
+          type="number"
+          placeholder="Maksimum üye"
+          errors={errors}
+          register={register}
+          w={100}
+        />
+        <FormField
           as={Switch}
           size="lg"
           label="Özel grup"
           name="isPrivate"
+          errors={errors}
+          register={register}
         />
-      </Flex>
+      </Stack>
 
-      {props.values.isPrivate && (
+      {isPrivate && (
         <FormField
-          {...props}
           placeholder="Gün seçiniz"
           label="Analiz günü"
           name="day"
           as={Select}
+          errors={errors}
+          register={register}
         >
           <option value={1}>Pazartesi</option>
           <option value={2}>Sali</option>
@@ -65,10 +67,9 @@ const CreateGroupForm = ({ isVisible, ...props }) => {
 }
 
 CreateGroupForm.propTypes = {
-  isVisible: PropTypes.bool.isRequired,
-  values: PropTypes.shape({
-    isPrivate: PropTypes.bool,
-  }),
+  errors: PropTypes.object,
+  register: PropTypes.func.isRequired,
+  isPrivate: PropTypes.bool.isRequired,
 }
 
 export default CreateGroupForm

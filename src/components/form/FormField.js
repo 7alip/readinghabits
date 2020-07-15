@@ -6,54 +6,54 @@ import {
   Input,
   FormErrorMessage,
 } from '@chakra-ui/core'
-import { Field } from 'formik'
 
 const FormField = ({
   errors,
-  touched,
-  values,
-  handleChange,
   name,
   as,
   label,
   isRequired,
   children,
+  register,
   ...rest
 }) => {
+  const Tag = as || Input
   return (
-    <FormControl
-      isRequired={isRequired}
-      isInvalid={errors[name] && touched[name]}
-    >
+    <FormControl mb={3} isRequired={isRequired} isInvalid={!!errors[name]}>
       {label && (
-        <FormLabel d="block" htmlFor="title">
+        <FormLabel d="block" htmlFor={name}>
           {label}
         </FormLabel>
       )}
-      <Field
-        {...rest}
-        as={as || Input}
-        value={values[name]}
-        onChange={handleChange}
+      <Tag
+        isInvalid={!!errors[name]}
+        errorBorderColor="red.400"
+        mb={0}
+        name={name}
         id={name}
+        ref={register}
+        w="full"
+        {...rest}
       >
         {as && children}
-      </Field>
-      {errors[name] && <FormErrorMessage>{errors[name]}</FormErrorMessage>}
+      </Tag>
+      {errors && (
+        <FormErrorMessage mt={0}>
+          {errors[name] && errors[name].message}
+        </FormErrorMessage>
+      )}
     </FormControl>
   )
 }
 
 FormField.propTypes = {
-  errors: PropTypes.object.isRequired,
-  touched: PropTypes.object,
-  values: PropTypes.object.isRequired,
-  handleChange: PropTypes.func.isRequired,
+  errors: PropTypes.object,
   name: PropTypes.string.isRequired,
   as: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   label: PropTypes.string,
   isRequired: PropTypes.bool,
   children: PropTypes.node,
+  register: PropTypes.func,
 }
 
 export default FormField

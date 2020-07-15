@@ -1,5 +1,5 @@
 import React from 'react'
-import { Stack, Box, useDisclosure, Modal, ModalOverlay } from '@chakra-ui/core'
+import { Stack, Box, useDisclosure } from '@chakra-ui/core'
 import SectionHeader from '../components/shared/SectionHeader'
 import { BsPeopleFill } from 'react-icons/bs'
 import Card from '../components/shared/Card'
@@ -19,15 +19,8 @@ const ProfileGroup = () => {
           onClick={onOpen}
         />
         <Card header="Grup Başlığı" memberCount={4} categoryCount={4} />
-        <Modal
-          scrollBehavior="inside"
-          isCentered
-          isOpen={isOpen}
-          onClose={onClose}
-        >
-          <ModalOverlay />
-          <CreateGroup onClose={onClose} />
-        </Modal>
+
+        <CreateGroup onClose={onClose} isOpen={isOpen} />
       </Box>
     </Stack>
   )

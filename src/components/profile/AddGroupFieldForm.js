@@ -1,50 +1,53 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Stack, Flex, Text, Switch } from '@chakra-ui/core'
-import { FieldArray } from 'formik'
-import FormField from '../form/FormField'
+import {
+  Stack,
+  Text,
+  Switch,
+  Input,
+  FormControl,
+  FormErrorMessage,
+} from '@chakra-ui/core'
 
-const AddGroupFieldForm = ({ isVisible, ...props }) => {
+const AddGroupFieldForm = ({ fields, errors, register }) => {
   return (
-    <Stack spacing={3} d={isVisible ? 'flex' : 'none'}>
-      <Flex fontWeight="bold" borderBottom="1px" justify="space-between">
-        <Text>Kategori</Text>
-        <Text>Haftalik hedef</Text>
-      </Flex>
-      <FieldArray
-        name="categories"
-        render={() =>
-          props.values.categories.map((c, index) => (
-            <Flex key={index} align="center" my={1}>
-              <Text w={200}>{c.title}</Text>
-              <FormField
-                {...props}
-                as={Switch}
-                isDisabled={c.minValue !== ''}
-                size="lg"
-                name={`categories.${index}.isActive`}
-              />
-              <FormField
-                isDisabled={!c.isActive}
-                ml={3}
-                {...props}
-                type="number"
-                name={`categories.${index}.minValue`}
-                placeholder="Haftalik hedef"
-              />
-            </Flex>
-          ))
-        }
-      />
+    <Stack spacing={3}>
+      {fields &&
+        fields.map((field, i) => (
+          <Stack align="center" justify="space-between" isInline key={i}>
+            <Text isTruncated w={150}>
+              {field.title}
+            </Text>
+            <Input d="none" ref={register} name={`fields[${i}].title`} />
+            <Input d="none" ref={register} name={`fields[${i}].id`} />
+            {field.isActive && (
+              <FormControl isInvalid={errors && !!errors[i]}>
+                <Input
+                  w={10}
+                  textAlign="center"
+                  isInvalid={errors && !!errors[i]}
+                  errorBorderColor="red.400"
+                  ref={register}
+                  placeholder="Hedef"
+                  name={`fields[${i}].minValue`}
+                  variant="flushed"
+                />
+                <FormErrorMessage isTruncated>
+                  {errors && errors[i] && errors[i].minValue.message}
+                </FormErrorMessage>
+              </FormControl>
+            )}
+            <Switch size="lg" ref={register} name={`fields[${i}].isActive`} />
+          </Stack>
+        ))}
     </Stack>
   )
 }
 
 AddGroupFieldForm.propTypes = {
-  isVisible: PropTypes.bool.isRequired,
-  values: PropTypes.shape({
-    categories: PropTypes.array,
-  }).isRequired,
+  fields: PropTypes.array,
+  errors: PropTypes.array,
+  register: PropTypes.func.isRequired,
 }
 
 export default AddGroupFieldForm

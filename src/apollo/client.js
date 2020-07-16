@@ -30,7 +30,7 @@ const cache = new InMemoryCache({})
 
 export const useAppApolloClient = () => {
   return new ApolloClient({
-    link: authMiddleware(userData.token).concat(httpLink),
+    link: authMiddleware(userData && userData.token).concat(httpLink),
     cache,
   })
 }

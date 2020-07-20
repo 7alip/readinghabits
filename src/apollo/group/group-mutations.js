@@ -40,7 +40,9 @@ export const INSERT_GROUP_FIELD = gql`
         min_value: $minValue
       }
     ) {
-      id
+      category {
+        title
+      }
     }
   }
 `

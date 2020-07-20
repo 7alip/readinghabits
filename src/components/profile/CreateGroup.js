@@ -13,6 +13,7 @@ import {
   Modal,
   ModalOverlay,
   Box,
+  useToast,
 } from '@chakra-ui/core'
 import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
@@ -20,6 +21,12 @@ import { yupResolver } from '@hookform/resolvers'
 
 import CreateGroupForm from './CreateGroupForm'
 import AddGroupFieldForm from './AddGroupFieldForm'
+import { useMutation } from '@apollo/client'
+
+import {
+  INSERT_GROUP,
+  INSERT_GROUP_FIELD,
+} from '../../apollo/group/group-mutations'
 
 const today = moment().format('YYYY-MM-DD')
 
@@ -53,59 +60,10 @@ const GroupSchema = Yup.object().shape({
   ),
 })
 
-const categories = [
-  {
-    id: 1,
-    title: "Kur'an-ı Kerim",
-  },
-  {
-    id: 3,
-    title: 'Pırlanta',
-  },
-  {
-    id: 14,
-    title: 'Dini Kitap',
-  },
-  {
-    id: 10,
-    title: 'Kültür Kitap',
-  },
-  {
-    id: 2,
-    title: 'Risale-i Nur',
-  },
-  {
-    id: 6,
-    title: 'Büyük Cevşen',
-  },
-  {
-    id: 5,
-    title: 'Cevşen',
-  },
-  {
-    id: 13,
-    title: 'Dualar',
-  },
-  {
-    id: 11,
-    title: "el Kulubu'd Daria",
-  },
-  {
-    id: 9,
-    title: 'Oruç',
-  },
-  {
-    id: 8,
-    title: 'Evvabin',
-  },
-  {
-    id: 7,
-    title: 'Teheccüd',
-  },
-]
-
-const CreateGroup = ({ onClose, isOpen }) => {
+const CreateGroup = ({ onClose, isOpen, categories }) => {
   const [isNextStep, setIsNextStep] = useState(false)
+
+  const toast = useToast()
 
   const { register, errors, handleSubmit, watch } = useForm({
     resolver: yupResolver(GroupSchema),
@@ -117,7 +75,8 @@ const CreateGroup = ({ onClose, isOpen }) => {
       isPrivate: false,
       day: 1,
       fields: categories.map(c => ({
-        ...c,
+        id: c.id,
+        title: c.title,
         minValue: undefined,
         isPrivate: false,
       })),
@@ -126,7 +85,67 @@ const CreateGroup = ({ onClose, isOpen }) => {
 
   const { fields, isPrivate, title, day } = watch()
 
-  const onSubmit = values => console.log('values', values)
+  const [onAddField, { loading: loadingAddField }] = useMutation(
+    INSERT_GROUP_FIELD,
+    {
+      onError: error => {
+        console.error('Error while adding field', error)
+        toast({
+          status: 'error',
+          title: 'Hata',
+          description: 'Kategori eklenirken hata oluştu',
+        })
+      },
+    },
+  )
+
+  const [onCreateGroup, { loading: loadingCreateGroup }] = useMutation(
+    INSERT_GROUP,
+    {
+      onCompleted: async result => {
+        await Promise.all(
+          fields
+            .filter(f => f.isActive)
+            .map(field =>
+              onAddField({
+                variables: {
+                  groupId: result.insert_group_one.id,
+                  categoryId: Number(field.id),
+                  minValue: Number(field.minValue),
+                },
+              }),
+            ),
+        )
+        toast({
+          status: 'success',
+          title: 'Tamamlandı',
+          description: 'Grup başarıyla oluşturuldu',
+        })
+        onClose()
+      },
+      onError: error => {
+        console.error('Error while creating group', error)
+        toast({
+          status: 'error',
+          title: 'Hata',
+          description: 'Grup oluşturulurken hata oluştu',
+        })
+      },
+    },
+  )
+
+  const onSubmit = values => {
+    onCreateGroup({
+      variables: {
+        title: values.title,
+        startDate: values.startDate.toLocaleDateString(),
+        endDate: values.endDate ? values.endDate.toLocaleDateString() : null,
+        maxUser: Number(values.maxUser),
+        isPrivate: values.isPrivate,
+        day: Number(values.day) || 1,
+      },
+    })
+  }
 
   return (
     <Modal scrollBehavior="inside" isCentered isOpen={isOpen} onClose={onClose}>
@@ -179,6 +198,7 @@ const CreateGroup = ({ onClose, isOpen }) => {
                 variantColor="teal"
                 type="submit"
                 isDisabled={fields.every(f => !f.isActive)}
+                isLoading={loadingCreateGroup || loadingAddField}
               >
                 Kaydet
               </Button>

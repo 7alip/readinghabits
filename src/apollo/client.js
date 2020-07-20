@@ -13,7 +13,6 @@ const httpLink = new HttpLink({
 
 const authMiddleware = token =>
   new ApolloLink((operation, forward) => {
-    console.log('token', token)
     // add the authorization to the headers
     if (token) {
       operation.setContext({

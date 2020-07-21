@@ -7,7 +7,7 @@ import BottomNavigation from './BottomNavigation'
 import ToggleTheme from './ToggleTheme'
 
 const Layout = ({ children }) => {
-  const isGropPage = useRouteMatch('/gruplar/:grupId')
+  const isGropPage = useRouteMatch('/grup/:grupId')
 
   const { colorMode } = useColorMode()
 

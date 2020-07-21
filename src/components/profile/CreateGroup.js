@@ -23,10 +23,7 @@ import CreateGroupForm from './CreateGroupForm'
 import AddGroupFieldForm from './AddGroupFieldForm'
 import { useMutation } from '@apollo/client'
 
-import {
-  INSERT_GROUP,
-  INSERT_GROUP_FIELD,
-} from '../../apollo/group/group-mutations'
+import { INSERT_GROUP, INSERT_GROUP_FIELD } from '../../apollo/queries/index'
 
 const today = moment().format('YYYY-MM-DD')
 

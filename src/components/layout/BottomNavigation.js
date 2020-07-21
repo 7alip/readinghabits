@@ -20,7 +20,7 @@ const barItems = [
   },
   {
     text: 'Gruplar',
-    link: '/gruplar',
+    link: '/grup',
     icon: <BsPeopleFill />,
   },
   {

@@ -1,13 +1,17 @@
 import React from 'react'
-import SectionHeader from '../components/shared/SectionHeader'
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { Box, Stack } from '@chakra-ui/core'
-import Card from '../components/shared/Card'
 import { BsCollectionFill } from 'react-icons/bs'
+import moment from 'moment'
+import 'moment/locale/tr'
 
-const ProfileUser = () => {
+import SetItem from '../components/profile/SetItem'
+import SectionHeader from '../components/shared/SectionHeader'
+
+const ProfileUser = ({ sets }) => {
   return (
     <Stack spacing={5}>
-      {/* Groups */}
       <Box>
         <SectionHeader
           icon={BsCollectionFill}
@@ -15,15 +19,34 @@ const ProfileUser = () => {
           buttonText="Set Oluştur"
           buttonIcon="add"
         />
-        <Card
-          header="Set Başlığı"
-          endDate="2020-10-04"
-          bookCount={4}
-          progress={23}
-        />
+        <Stack spacing={3}>
+          {sets.map(set => (
+            <Box key={set.id} as={Link} to="/set/1">
+              <SetItem
+                id={set.id}
+                header={set.title}
+                startDate={moment(set.start_date, 'YYYY-MM-DD').fromNow()}
+                bookCount={set.books_aggregate.aggregate.count}
+                readCount={set.readings_aggregate.aggregate.sum.value}
+              />
+            </Box>
+          ))}
+        </Stack>
       </Box>
     </Stack>
   )
+}
+
+ProfileUser.propTypes = {
+  sets: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      title: PropTypes.string,
+      start_date: PropTypes.string,
+      books_aggregate: PropTypes.object,
+      readings_aggregate: PropTypes.object,
+    }),
+  ),
 }
 
 export default ProfileUser

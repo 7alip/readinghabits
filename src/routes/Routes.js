@@ -30,12 +30,12 @@ const routes = [
     isPrivate: true,
   },
   {
-    path: '/gruplar',
+    path: '/grup',
     component: GroupsPage,
     exact: true,
   },
   {
-    path: '/gruplar/:grupId',
+    path: '/grup/:grupId',
     component: GroupPage,
     isPrivate: true,
   },

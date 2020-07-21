@@ -8,16 +8,16 @@ const Groups = () => {
     <Box>
       <Heading>Gruplar</Heading>
       <Box>
-        <Link to="/gruplar/1">Grup 1</Link>
+        <Link to="/grup/1">Grup 1</Link>
       </Box>
       <Box>
-        <Link to="/gruplar/2">Grup 2</Link>
+        <Link to="/grup/2">Grup 2</Link>
       </Box>
       <Box>
-        <Link to="/gruplar/3">Grup 3</Link>
+        <Link to="/grup/3">Grup 3</Link>
       </Box>
       <Box>
-        <Link to="/gruplar/4">Grup 4</Link>
+        <Link to="/grup/4">Grup 4</Link>
       </Box>
     </Box>
   )

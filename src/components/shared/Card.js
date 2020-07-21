@@ -6,33 +6,33 @@ import {
   List,
   ListItem,
   ListIcon,
-  useTheme,
+  CircularProgress,
+  CircularProgressLabel,
 } from '@chakra-ui/core'
 import { FaCalendarCheck, FaBook } from 'react-icons/fa'
 import { BsPeopleCircle } from 'react-icons/bs'
-import Circle from 'react-circle'
 
 import Base from './Base'
 
 const Card = ({
   header,
-  endDate,
+  startDate,
   categoryCount,
   memberCount,
   bookCount,
+  totalPages,
   progress,
 }) => {
-  const theme = useTheme()
   return (
     <Base p={4} boxShadow="sm" borderRadius={7}>
       <Heading as="h3" size="lg" color="teal.400">
         {header}
       </Heading>
-      <Flex mt={4} justify="space-between" align="center">
+      <Flex mt={4} justify="space-between">
         <List>
           <ListItem>
             <ListIcon icon={FaCalendarCheck} color="teal.400" />
-            {endDate || 'Süre belirtilmedi'}
+            {startDate + ' başlatıldı' || 'Süre belirtilmedi'}
           </ListItem>
           {memberCount && (
             <ListItem>
@@ -49,17 +49,19 @@ const Card = ({
           {bookCount && (
             <ListItem>
               <ListIcon icon={FaBook} color="teal.400" />
-              {bookCount} kitap
+              {bookCount} kitap | {totalPages} sayfa
             </ListItem>
           )}
         </List>
-        {progress && (
-          <Circle
-            progress={progress}
-            progressColor={theme.colors.teal[500]}
-            textColor={theme.colors.teal[400]}
-            lineWidth={40}
-          />
+        {progress >= 0 && (
+          <CircularProgress
+            value={progress}
+            color="teal"
+            thickness={0.3}
+            size={100}
+          >
+            <CircularProgressLabel>{progress}%</CircularProgressLabel>
+          </CircularProgress>
         )}
       </Flex>
     </Base>
@@ -68,9 +70,10 @@ const Card = ({
 
 Card.propTypes = {
   header: PropTypes.string.isRequired,
-  endDate: PropTypes.string,
+  startDate: PropTypes.string,
   categoryCount: PropTypes.number,
   bookCount: PropTypes.number,
+  totalPages: PropTypes.number,
   memberCount: PropTypes.number,
   progress: PropTypes.number,
 }

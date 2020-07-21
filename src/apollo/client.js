@@ -1,24 +1,35 @@
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client'
-import { setContext } from '@apollo/link-context'
+import {
+  ApolloClient,
+  ApolloLink,
+  HttpLink,
+  InMemoryCache,
+} from '@apollo/client'
 
-const httpLink = createHttpLink({
-  uri:
-    process.env.BACKEND_API || 'https://manevitakip.herokuapp.com/v1/graphql',
+const userData = JSON.parse(localStorage.getItem('userData'))
+
+const httpLink = new HttpLink({
+  uri: 'https://manevitakip.herokuapp.com/v1/graphql',
 })
 
-const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  const userData = JSON.parse(localStorage.getItem('userData')) || {}
-  let _headers = { ...headers }
+const authMiddleware = token =>
+  new ApolloLink((operation, forward) => {
+    // add the authorization to the headers
+    if (token) {
+      operation.setContext({
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+    }
 
-  if (userData.token) {
-    _headers.authorization = `Bearer ${userData.token}`
-  }
+    return forward(operation)
+  })
 
-  return _headers
-})
+const cache = new InMemoryCache({})
 
-export const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
-})
+export const useAppApolloClient = () => {
+  return new ApolloClient({
+    link: authMiddleware(userData && userData.token).concat(httpLink),
+    cache,
+  })
+}

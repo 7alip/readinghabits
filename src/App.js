@@ -4,7 +4,7 @@ import { CSSReset, ColorModeProvider, ThemeProvider } from '@chakra-ui/core'
 
 import { AuthContext } from './context/auth-context'
 import { useAuth } from './hooks/auth-hook'
-import { client } from './apollo/client'
+import { useAppApolloClient } from './apollo/client'
 import theme from './context/theme'
 import Routes from './routes/Routes'
 
@@ -29,6 +29,8 @@ function App() {
     clearResetToken,
     resetToken,
   }
+
+  const client = useAppApolloClient()
 
   return (
     <React.StrictMode>
